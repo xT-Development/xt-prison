@@ -6,6 +6,7 @@ Config.DebugPoly = true
 
 -- Police Config --
 Config.PoliceJobs = { 'police' }
+Config.Dispatch = 'ps' -- 'ps' or 'default'
 Config.EnableJailCommand = true -- Jail command using ox_lib input menu
 
 -- Remove Jobs Entering Prison --

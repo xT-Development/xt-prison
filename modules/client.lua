@@ -75,7 +75,8 @@ function xTc.EnterPrison(TIME)
         Wait(2000)
         DoScreenFadeIn(1000)
         TriggerEvent('prison:client:JailAlarm', false)
-        TriggerServerEvent('xt-prison:server:Countdown')
+
+        xTc.TimeReductionLoop()
 
         local alertInfo = Config.EnterPrisonAlert
         local alert = lib.alertDialog({
@@ -87,22 +88,18 @@ function xTc.EnterPrison(TIME)
     end
 end
 
--- Cleanup Stuff --
-function xTc.LeavePrisonCleanup()
-    TriggerEvent('XTPrisonJobsCleanup')
-end
-
 -- Exiting Prison --
 function xTc.ExitPrison()
-    local jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
-    if jailTime > 0 then
-		QBCore.Functions.Notify('You still have '..jailTime..' months left!', 'error')
+    local getJailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
+    if getJailTime > 0 then
+		QBCore.Functions.Notify('You still have '..getJailTime..' months left!', 'error')
 	else
         local setJailTime = lib.callback.await('xt-prison:server:SetJailStatus', false, 0)
         if setJailTime then
             jailTime = 0
             inJail = false
-            xTc.LeavePrisonCleanup()
+
+            TriggerEvent('XTPrisonJobsCleanup')
 
             DoScreenFadeOut(500)
             while not IsScreenFadedOut() do Wait(25) end
@@ -171,7 +168,11 @@ end
 
 -- Notify Police --
 function xTc.PoliceNotify()
-    exports['ps-dispatch']:PrisonBreak()
+    if Config.Dispatch == 'ps' then
+        exports['ps-dispatch']:PrisonBreak()
+    elseif Config.Dispatch == 'default' then
+        TriggerEvent('police:client:policeAlert', Config.PrisonBreak.center, 'Prison Break')
+    end
     CopsNotified = true
 end
 
@@ -214,6 +215,18 @@ function xTc.PrisonBreakBlip()
     SetBlipColour(PulsingBlip, 3)
     PulseBlip(PulsingBlip)
     return PulsingBlip
+end
+
+function xTc.TimeReductionLoop()
+    jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
+    if jailTime > 0 then
+        SetTimeout(60000, function()
+            local setTime = lib.callback.await('xt-prison:server:SetJailStatus', false, (jailTime - 1))
+            if setTime then xTc.TimeReductionLoop() else return end
+        end)
+    elseif jailTime <= 0 then
+        QBCore.Functions.Notify('Your time is up! Go checkout with the guard in the cells!', "success", 10000)
+    end
 end
 
 return xTc
