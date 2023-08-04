@@ -31,13 +31,13 @@ Config.Spawns = {
 
 -- Prisonbreak Configuration --
 Config.PrisonBreak = {
-    center = vec3(1699.86, 2605.15, 45.56),
-    maxDistance = 300,
-    requriedItems = { 'trojan_usb' },
+    center = vec3(1699.86, 2605.15, 45.56), -- Center check for prison break
+    radius = 200, -- Radius of prison break
+    requriedItems = { 'trojan_usb' }, -- Required items for prison break hack
     hackLength = 60, -- Seconds
     alarmLength = 10, -- Minutes
     terminalCooldowns = 10, -- Cooldown on hacking terminals once they are hacked
-    minimumPolice = 0,
+    minimumPolice = 0, -- Minimum required police to start prison break
     hackZones = {
         { coords = vec3(1846.05, 2604.7, 45.65), gate = 'prison 1', radius = 0.4, isHacked = false, isBusy = false },
         { coords = vec3(1819.55, 2604.7, 45.6),  gate = 'prison 2', radius = 0.4, isHacked = false, isBusy = false },
