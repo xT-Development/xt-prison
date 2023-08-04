@@ -73,9 +73,13 @@ lib.callback.register('xt-prison:server:SetJailStatus', function(source, TIME)
     local jailTime = Player.PlayerData.metadata['injail']
     local callback = false
     if jailTime < TIME then
-        if Player.Functions.SetMetaData("injail", TIME) then callback = true end
+        local timeDiff = (TIME - jailTime) -- In case time changes from prison jobs before 1 min reduction tick
+        local newTime = (jailTime - timeDiff)
+        if Player.Functions.SetMetaData("injail", newTime) then callback = true end
     elseif jailTime >= TIME then
-        callback = true
+        local timeDiff = (jailTime - TIME) -- In case time changes from prison jobs before 1 min reduction tick
+        local newTime = (jailTime - timeDiff)
+        if Player.Functions.SetMetaData("injail", newTime) then callback = true end
     end
     return callback
 end)
