@@ -1,9 +1,6 @@
 local xTs = require('modules.server')
 local Utils = require('modules.shared')
 
--- Countdown Player's Time --
-RegisterNetEvent('xt-prison:server:Countdown', function() xTs.TimeReductionLoop(source) end)
-
 -- Prisonbreak Terminal States --
 RegisterNetEvent('xt-prison:server:TerminalHackedState', function(ID, BOOL) xTs.TerminalHackedState(ID, BOOL) end)
 RegisterNetEvent('xt-prison:server:TerminalBusyState', function(ID, BOOL) xTs.TerminalBusyState(ID, BOOL) end)
@@ -72,14 +69,13 @@ lib.callback.register('xt-prison:server:SetJailStatus', function(source, TIME)
     local Player = QBCore.Functions.GetPlayer(src)
     local jailTime = Player.PlayerData.metadata['injail']
     local callback = false
-    if jailTime < TIME then
-        local timeDiff = (TIME - jailTime) -- In case time changes from prison jobs before 1 min reduction tick
-        local newTime = (jailTime - timeDiff)
-        if Player.Functions.SetMetaData("injail", newTime) then callback = true end
-    elseif jailTime >= TIME then
-        local timeDiff = (jailTime - TIME) -- In case time changes from prison jobs before 1 min reduction tick
-        local newTime = (jailTime - timeDiff)
-        if Player.Functions.SetMetaData("injail", newTime) then callback = true end
+    if jailTime == TIME then return true end
+    if TIME < 0 then Player.Functions.SetMetaData('injail', 0) return end
+    if jailTime > TIME then
+        Player.Functions.SetMetaData('injail', TIME)
+        callback = true
+    else
+        callback = true
     end
     return callback
 end)

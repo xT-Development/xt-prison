@@ -21,32 +21,6 @@ function xTs.isCop(source)
     return callback
 end
 
--- Countdown Player Time --
-function xTs.TimeReductionLoop(source)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    if not Player then return end
-
-    local jailTime = Player.PlayerData.metadata['injail']
-
-    if jailTime > 0 then
-        SetTimeout(60000, function()
-            if jailTime > 0 then
-                jailTime -= 1
-                Player.Functions.SetMetaData('injail', jailTime)
-                if jailTime <= 0 then
-                    jailTime = 0
-                    QBCore.Functions.Notify(src, 'Your time is up! Go checkout with the guard in the cells!', "success", 10000)
-                else
-                    xTs.TimeReductionLoop(src)
-                end
-            end
-        end)
-    elseif jailTime <= 0 then
-        QBCore.Functions.Notify(src, 'Your time is up! Go checkout with the guard in the cells!', "success", 10000)
-    end
-end
-
 -- Breakout of Prison --
 function xTs.PrisonBreakout()
     local src = source
@@ -57,14 +31,13 @@ function xTs.PrisonBreakout()
     local CID = Player.PlayerData.citizenid
     local jailTime = Player.PlayerData.metadata['injail']
 
-    if jailTime ~= 0 then
-        if Player.Functions.SetMetaData('injail', 0) then
-            -- Delete Confiscated Inv --
-            local getInv = MySQL.query.await('SELECT * FROM ox_inventory WHERE owner = ? AND name = ?', { CID, CID })
-            if getInv and getInv[1] then
-                MySQL.query('DELETE FROM ox_inventory WHERE name = ?', { CID })
-                Utils.Debug('Prison Breakout', 'Player: '..name..' | Deleted Prison Inv: '..CID)
-            end
+    if jailTime ~= 0 and jailTime > 0 then
+        Player.Functions.SetMetaData('injail', 0)
+        -- Delete Confiscated Inv --
+        local getInv = MySQL.query.await('SELECT * FROM ox_inventory WHERE owner = ? AND name = ?', { CID, CID })
+        if getInv and getInv[1] then
+            MySQL.query('DELETE FROM ox_inventory WHERE name = ?', { CID })
+            Utils.Debug('Prison Breakout', 'Player: '..name..' | Deleted Prison Inv: '..CID)
         end
     end
 end
