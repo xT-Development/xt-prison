@@ -1,0 +1,219 @@
+local Utils = require('modules.shared')
+local CopsNotified = false
+local HackZone = {}
+local inJail = false
+local CurrentCops = 0
+
+RegisterNetEvent('police:SetCopCount', function(amount) CurrentCops = amount end)
+
+local xTc = {}
+
+-- Play Emote --
+function xTc.Emote(emote)
+    if emote == nil then Utils.Debug('Play Emote Error', 'Emote is nil!') return end
+    if not exports.scully_emotemenu:playEmoteByCommand(emote) then
+        TriggerEvent('animations:client:EmoteCommandStart', {emote})
+    end
+    Utils.Debug('Play Emote', emote)
+end
+
+-- End Emote --
+function xTc.EndEmote()
+    if not exports.scully_emotemenu:cancelEmote() then
+        TriggerEvent('animations:client:EmoteCommandStart', {'c'})
+    end
+    Utils.Debug('End Emote')
+end
+
+-- Create Prison Zone for Prison Break Distance Checks --
+function xTc.PrisonZone()
+    PrisonZone = lib.points.new({
+        coords = Config.PrisonBreak.center,
+        distance = 200,
+    })
+
+    function PrisonZone:onExit()
+        if inJail then
+            inJail = false
+            jailTime = 0
+            local alarm = lib.callback.await('xt-prison:server:PrisonAlarms', false, true)
+            QBCore.Functions.Notify('You escaped prison!', "error")
+            TriggerServerEvent('xt-prison:server:Breakout')
+            xTc.LeavePrisonCleanup()
+        end
+    end
+end
+
+-- Entering Prison --
+function xTc.EnterPrison(TIME)
+    local setJailTime = lib.callback.await('xt-prison:server:SetJailStatus', false, TIME)
+    if setJailTime then
+        local removeItems = lib.callback.await('xt-prison:server:RemoveItems', false)
+        if Config.RemoveJob then local removeJob = lib.callback.await('xt-prison:server:RemoveJob', false) end
+
+        DoScreenFadeOut(500)
+        while not IsScreenFadedOut() do Wait(25) end
+
+        local RandomSpawn = Config.Spawns[math.random(1, #Config.Spawns)]
+        SetEntityCoords(cache.ped, RandomSpawn.coords.x, RandomSpawn.coords.y, RandomSpawn.coords.z - 0.9, 0, 0, 0, false)
+        SetEntityHeading(cache.ped, RandomSpawn.coords.w)
+
+        -- Maybe this helps players with dookie butt water computers? idk. too lazy to look into it --
+        Wait(500)
+        if GetEntityCoords(cache.ped) ~= vec3(RandomSpawn.coords.x, RandomSpawn.coords.y, RandomSpawn.coords.z - 0.9) then
+            SetEntityCoords(cache.ped, RandomSpawn.coords.x, RandomSpawn.coords.y, RandomSpawn.coords.z - 0.9, 0, 0, 0, false)
+            SetEntityHeading(cache.ped, RandomSpawn.coords.w)
+        end
+
+        xTc.Emote(RandomSpawn.emote)
+
+        inJail = true
+        jailTime = TIME
+
+        TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
+        TriggerEvent('XTEnterPrison')
+        Wait(2000)
+        DoScreenFadeIn(1000)
+        TriggerEvent('prison:client:JailAlarm', false)
+        TriggerServerEvent('xt-prison:server:Countdown')
+
+        local alertInfo = Config.EnterPrisonAlert
+        local alert = lib.alertDialog({
+            header = alertInfo.header,
+            content = 'Prison Sentence: '..jailTime..'  \n'..alertInfo.content,
+            centered = true,
+            labels = { confirm = 'Close' }
+        })
+    end
+end
+
+-- Cleanup Stuff --
+function xTc.LeavePrisonCleanup()
+    TriggerEvent('XTPrisonJobsCleanup')
+end
+
+-- Exiting Prison --
+function xTc.ExitPrison()
+    local jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
+    if jailTime > 0 then
+		QBCore.Functions.Notify('You still have '..jailTime..' months left!', 'error')
+	else
+        local setJailTime = lib.callback.await('xt-prison:server:SetJailStatus', false, 0)
+        if setJailTime then
+            jailTime = 0
+            inJail = false
+            xTc.LeavePrisonCleanup()
+
+            DoScreenFadeOut(500)
+            while not IsScreenFadedOut() do Wait(25) end
+
+            TriggerServerEvent('qb-clothes:loadPlayerSkin')
+            SetEntityCoords(cache.ped, Config.Freedom.x, Config.Freedom.y, Config.Freedom.z, 0, 0, 0, false)
+            SetEntityHeading(cache.ped, Config.Freedom.w)
+
+            Wait(500)
+            DoScreenFadeIn(1000)
+            local returnItems = lib.callback.await('xt-prison:server:ReturnItems', false)
+        end
+	end
+end
+
+-- Create Prisonbreak Hacking Zones --
+function xTc.HackZones()
+    for x = 1, #Config.PrisonBreak.hackZones do
+        local zoneInfo = Config.PrisonBreak.hackZones[x]
+        HackZone[x] = exports.ox_target:addSphereZone({
+            coords = zoneInfo.coords,
+            radius = zoneInfo.radius,
+            debug = Config.DebugPoly,
+            drawsprite = true,
+            options = {
+                {
+                    label = 'Hack Prison Gate',
+                    icon = 'fas fa-laptop-code',
+                    items = Config.PrisonBreak.requiredItems,
+                    onSelect = function() xTc.StartGateHack(x) end,
+                    canInteract = function()
+                        local canHack = lib.callback.await('xt-prison:server:CanHackTerminal', false, x)
+                        if CurrentCops >= Config.PrisonBreak.minimumPolice and canHack then return true else return false end
+                    end
+                }
+            }
+        })
+    end
+end
+
+-- Remove Prisonbreak Hacking Zones --
+function xTc.RemoveHackZones()
+    for x = 1, #HackZone do exports.ox_target:removeZone(HackZone[x]) end
+end
+
+-- Start Hacking Terminal --
+function xTc.StartGateHack(ID)
+    xTc.Emote('tablet2')
+    TriggerServerEvent('xt-prison:server:TerminalBusyState', ID, true)
+    TriggerEvent('ultra-voltlab', Config.PrisonBreak.hackLength, function(result, reason)
+        if result == 0 then
+            QBCore.Functions.Notify('You failed the hack!', 'error')
+        elseif result == 1 then
+            QBCore.Functions.Notify('You completed the hack!', 'success')
+            TriggerServerEvent('xt-prison:server:TerminalHackedState', ID, true)
+        elseif result == 2 then
+            QBCore.Functions.Notify('You failed to complete the hack in time!', 'error')
+        elseif result == -1 then
+            QBCore.Functions.Notify('Error!', 'error')
+        end
+        local triggerAlarm = lib.callback.await('xt-prison:server:PrisonAlarms', false, true)
+        TriggerServerEvent('xt-prison:server:TerminalBusyState', ID, false)
+        xTc.EndEmote()
+    end)
+end
+
+-- Notify Police --
+function xTc.PoliceNotify()
+    exports['ps-dispatch']:PrisonBreak()
+    CopsNotified = true
+end
+
+-- Prison Alarm Toggle --
+function xTc.PrisonAlarm(BOOL)
+    if BOOL then
+        local alarmIpl = GetInteriorAtCoordsWithType(1787.004,2593.1984,45.7978, "int_prison_main")
+        if not CopsNotified then xTc.PoliceNotify() end
+
+        RefreshInterior(alarmIpl)
+        EnableInteriorProp(alarmIpl, "prison_alarm")
+
+        CreateThread(function()
+            while not PrepareAlarm("PRISON_ALARMS") do Wait(100) end
+            StartAlarm("PRISON_ALARMS", true)
+        end)
+
+        if not DoesBlipExist(PrisonBreakBlip) then PrisonBreakBlip = xTc.PrisonBreakBlip() end
+    else
+        local alarmIpl = GetInteriorAtCoordsWithType(1787.004,2593.1984,45.7978, "int_prison_main")
+
+        RefreshInterior(alarmIpl)
+        DisableInteriorProp(alarmIpl, "prison_alarm")
+
+        CreateThread(function()
+            while not PrepareAlarm("PRISON_ALARMS") do Wait(100) end
+            StopAllAlarms(true)
+        end)
+
+        if DoesBlipExist(PrisonBreakBlip) then RemoveBlip(PrisonBreakBlip) end
+        CopsNotified = false
+    end
+end
+
+-- Create Prison Break Blip --
+function xTc.PrisonBreakBlip()
+    local PulsingBlip = AddBlipForCoord(Config.PrisonBreak.center.x, Config.PrisonBreak.center.y, Config.PrisonBreak.center.z)
+    SetBlipSprite(PulsingBlip , 161)
+    SetBlipScale(PulsingBlip , 3.0)
+    SetBlipColour(PulsingBlip, 3)
+    PulseBlip(PulsingBlip)
+    return PulsingBlip
+end
+
+return xTc
