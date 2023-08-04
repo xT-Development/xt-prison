@@ -29,7 +29,7 @@ end
 function xTc.PrisonZone()
     PrisonZone = lib.points.new({
         coords = Config.PrisonBreak.center,
-        distance = 200,
+        distance =  Config.PrisonBreak.radius,
     })
 
     function PrisonZone:onExit()
@@ -39,7 +39,7 @@ function xTc.PrisonZone()
             local alarm = lib.callback.await('xt-prison:server:PrisonAlarms', false, true)
             QBCore.Functions.Notify('You escaped prison!', "error")
             TriggerServerEvent('xt-prison:server:Breakout')
-            xTc.LeavePrisonCleanup()
+            TriggerEvent('XTPrisonJobsCleanup')
         end
     end
 end
@@ -219,12 +219,13 @@ end
 
 function xTc.TimeReductionLoop()
     jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
-    if jailTime > 0 then
+    Utils.Debug('Time Left:', jailTime)
+    if jailTime > 0 and inJail then
         SetTimeout(60000, function()
             local setTime = lib.callback.await('xt-prison:server:SetJailStatus', false, (jailTime - 1))
-            if setTime then xTc.TimeReductionLoop() else return end
+            if setTime then Utils.Debug('Time Reduced', jailTime) xTc.TimeReductionLoop() else return end
         end)
-    elseif jailTime <= 0 then
+    elseif jailTime <= 0 and inJail then
         QBCore.Functions.Notify('Your time is up! Go checkout with the guard in the cells!', "success", 10000)
     end
 end

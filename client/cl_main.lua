@@ -28,7 +28,7 @@ end
 -- Player Load --
 local function playerLoaded()
     jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
-    if jailTime > 0 then TriggerEvent('prison:client:Enter', jailTime) end
+    if jailTime ~= 0 and jailTime > 0 then TriggerEvent('prison:client:Enter', jailTime) end
     if GlobalState.PrisonAlarms then xTc.PrisonAlarm(true) else xTc.PrisonAlarm(false) end
     xTc.PrisonZone()
     xTc.HackZones()
@@ -45,4 +45,3 @@ AddEventHandler('onResourceStart', function(resource) if resource == GetCurrentR
 AddEventHandler('onResourceStop', function(resource) if resource == GetCurrentResourceName() then playerUnload() end end)
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function() playerLoaded() end)
 RegisterNetEvent('QBCore:Client:OnPlayerUnload', function() playerUnload() end)
-RegisterNetEvent('QBCore:Client:SetDuty', function(duty) onDuty = duty end)
