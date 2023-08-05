@@ -39,7 +39,7 @@ function xTc.PrisonZone()
             local alarm = lib.callback.await('xt-prison:server:PrisonAlarms', false, true)
             QBCore.Functions.Notify('You escaped prison!', "error")
             TriggerServerEvent('xt-prison:server:Breakout')
-            TriggerEvent('XTPrisonJobsCleanup')
+            if Config.XTPrisonJobs then TriggerEvent('XTPrisonJobsCleanup') end
         end
     end
 end
@@ -71,7 +71,7 @@ function xTc.EnterPrison(TIME)
         jailTime = TIME
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
-        TriggerEvent('XTEnterPrison')
+        if Config.XTPrisonJobs then TriggerEvent('XTEnterPrison') end
         Wait(2000)
         DoScreenFadeIn(1000)
         TriggerEvent('prison:client:JailAlarm', false)
@@ -99,7 +99,7 @@ function xTc.ExitPrison()
             jailTime = 0
             inJail = false
 
-            TriggerEvent('XTPrisonJobsCleanup')
+            if Config.XTPrisonJobs then TriggerEvent('XTPrisonJobsCleanup') end
 
             DoScreenFadeOut(500)
             while not IsScreenFadedOut() do Wait(25) end

@@ -4,6 +4,9 @@ Config = {}
 Config.Debug = true
 Config.DebugPoly = true
 
+-- Enable/Disable Using xt-prisonjobs --
+Config.XTPrisonJobs = true
+
 -- Police Config --
 Config.PoliceJobs = { 'police' }
 Config.Dispatch = 'ps' -- 'ps' or 'default'
