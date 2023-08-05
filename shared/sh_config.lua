@@ -1,8 +1,8 @@
 Config = {}
 
 -- Debug Configs --
-Config.Debug = true
-Config.DebugPoly = true
+Config.Debug = false
+Config.DebugPoly = false
 
 -- Enable/Disable Using xt-prisonjobs --
 Config.XTPrisonJobs = true
