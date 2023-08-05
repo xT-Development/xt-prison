@@ -53,4 +53,3 @@ Config.PrisonBreak = {
 -------------------------------------------------
 
 QBCore = exports['qb-core']:GetCoreObject()
-sharedItems = exports.ox_inventory:Items()
