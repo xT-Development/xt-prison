@@ -51,7 +51,7 @@ function xTc.EnterPrison(TIME)
         local removeItems = lib.callback.await('xt-prison:server:RemoveItems', false)
         if Config.RemoveJob then local removeJob = lib.callback.await('xt-prison:server:RemoveJob', false) end
 
-        DoScreenFadeOut(500)
+        DoScreenFadeOut(1000)
         while not IsScreenFadedOut() do Wait(25) end
 
         local RandomSpawn = Config.Spawns[math.random(1, #Config.Spawns)]
@@ -72,19 +72,20 @@ function xTc.EnterPrison(TIME)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
         if Config.XTPrisonJobs then TriggerEvent('XTEnterPrison') end
-        Wait(2000)
+        Wait(3000)
         DoScreenFadeIn(1000)
-        TriggerEvent('prison:client:JailAlarm', false)
 
         xTc.TimeReductionLoop()
 
-        local alertInfo = Config.EnterPrisonAlert
-        local alert = lib.alertDialog({
-            header = alertInfo.header,
-            content = 'Prison Sentence: '..jailTime..'  \n'..alertInfo.content,
-            centered = true,
-            labels = { confirm = 'Close' }
-        })
+        if Config.EnterPrisonAlert.enable then
+            local alertInfo = Config.EnterPrisonAlert
+            local alert = lib.alertDialog({
+                header = alertInfo.header,
+                content = 'Prison Sentence: '..jailTime..'  \n'..alertInfo.content,
+                centered = true,
+                labels = { confirm = 'Close' }
+            })
+        end
     end
 end
 

@@ -20,6 +20,7 @@ Config.Freedom = vec4(1839.9522705078, 2581.2080078125, 46.014366149902, 2.94192
 
 -- Alert Entering Prison --
 Config.EnterPrisonAlert  = {
+    enable = true,
     header = 'Welcome to Prison, Criminal Scum!',
     content = 'To reduce your time in prison, get a job from the guard in the cells. Get your ass to work and maybe you\'ll learn a thing or two.',
 }
