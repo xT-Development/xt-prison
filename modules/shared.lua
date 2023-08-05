@@ -1,4 +1,9 @@
--- Shared Modules --
+-- Resource Print on Startup --
+AddEventHandler('onResourceStart', function(resource)
+    if resource == GetCurrentResourceName() then
+        if Config.Debug then print('^2xT Debug ^7| xT Development | ^2dsc.gg/xtdev ^7| '..resource) end
+    end
+end)
 
 local Utils = {}
 
@@ -46,12 +51,5 @@ function Utils.CheckJob(job)
     Utils.Debug('Job Check', 'Type: '..checkType)
     return callback
 end
-
--- Debug / Resource Print on Startup --
-AddEventHandler('onResourceStart', function(resource)
-    if resource == GetCurrentResourceName() then
-        Utils.Debug('xT Development', 'dsc.gg/xtdev ^7| '..resource)
-    end
-end)
 
 return Utils
