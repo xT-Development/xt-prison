@@ -19,5 +19,7 @@
 - [ox_doorlock](https://github.com/overextended/ox_doorlock/releases)
 - [Voltlab Hacking Minigame](https://forum.cfx.re/t/release-voltlab-hacking-minigame-cayo-perico-mission/3933171)
 
+# [Documentation](https://xtdev.gitbook.io/xt-docs/free-resources/xt-prison)
+
 ### Credits
 S/o to [qb-prison](https://github.com/qbcore-framework/qb-prison) for pissing me off long enough to make 5 different prison resources.
