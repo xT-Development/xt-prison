@@ -16,6 +16,7 @@
 - [ox_lib](https://github.com/overextended/ox_lib/releases)
 - [ox_inventory](https://github.com/overextended/ox_inventory/releases)
 - [ox_target](https://github.com/overextended/ox_target/releases)
+- [ox_doorlock](https://github.com/overextended/ox_doorlock/releases)
 - [Voltlab Hacking Minigame](https://forum.cfx.re/t/release-voltlab-hacking-minigame-cayo-perico-mission/3933171)
 
 ### Credits
