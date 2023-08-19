@@ -15,6 +15,7 @@ function xTs.LiferCheck(source)
     end
     return callback
 end
+exports('isLifer', xTs.LiferCheck)
 
 -- Server Log --
 function xTs.Log(logName, color, title, text)
