@@ -96,6 +96,9 @@ lib.callback.register('xt-prison:server:PrisonAlarms', function(source, BOOL)
     return
 end)
 
+-- Check if Player is a Lifer --
+lib.callback.register('xt-prison:server:LiferCheck', function(source) return xTs.LiferCheck(source) end)
+
 AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then
         for x = 1, #Config.PrisonBreak.hackZones do

@@ -25,6 +25,14 @@ Config.EnterPrisonAlert  = {
     content = 'To reduce your time in prison, get a job from the guard in the cells. Get your ass to work and maybe you\'ll learn a thing or two.',
 }
 
+-- Lifers --
+-- Add player citizenids here
+Config.Lifers = {
+    'WNM66942',
+    'EXAMPLECID',
+    'EXAMPLECID'
+}
+
 -- Random Spawns & Emotes --
 Config.Spawns = {
     { coords = vec4(1770.7249755859, 2479.9802246094, 45.74076461792, 31.66007232666),   emote = 'pushup' },

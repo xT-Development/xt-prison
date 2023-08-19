@@ -8,11 +8,16 @@ lib.addCommand('jailtime', {
 }, function(source, args, raw)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
-    local jailTime = Player.PlayerData.metadata['injail']
-    if jailTime > 0 then
-        QBCore.Functions.Notify(src, 'You have '..jailTime..' months left.', 'info')
-    elseif jailTime <= 0 then
-        QBCore.Functions.Notify(src, 'You don\'t have any jail time left!', 'info')
+    local isLifer = xTs.LiferCheck(src)
+    if isLifer then
+        QBCore.Functions.Notify(src, 'You\'re in jail for life!', 'info')
+    else
+        local jailTime = Player.PlayerData.metadata['injail']
+        if jailTime > 0 then
+            QBCore.Functions.Notify(src, 'You have '..jailTime..' months left.', 'info')
+        elseif jailTime <= 0 then
+            QBCore.Functions.Notify(src, 'You don\'t have any jail time left!', 'info')
+        end
     end
 end)
 

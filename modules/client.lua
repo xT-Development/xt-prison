@@ -49,6 +49,7 @@ function xTc.EnterPrison(TIME)
     local setJailTime = lib.callback.await('xt-prison:server:SetJailStatus', false, TIME)
     if setJailTime then
         local removeItems = lib.callback.await('xt-prison:server:RemoveItems', false)
+        local isLifer = lib.callback.await('xt-prison:server:LiferCheck', false)
         if Config.RemoveJob then local removeJob = lib.callback.await('xt-prison:server:RemoveJob', false) end
 
         DoScreenFadeOut(1000)
@@ -75,9 +76,9 @@ function xTc.EnterPrison(TIME)
         Wait(3000)
         DoScreenFadeIn(1000)
 
-        xTc.TimeReductionLoop()
+        if not isLifer then xTc.TimeReductionLoop() end
 
-        if Config.EnterPrisonAlert.enable then
+        if Config.EnterPrisonAlert.enable and not isLifer then
             local alertInfo = Config.EnterPrisonAlert
             local alert = lib.alertDialog({
                 header = alertInfo.header,
@@ -85,6 +86,8 @@ function xTc.EnterPrison(TIME)
                 centered = true,
                 labels = { confirm = 'Close' }
             })
+        elseif Config.EnterPrisonAlert.enable and isLifer then
+            QBCore.Functions.Notify('You\'re a lifer!', 'error')
         end
     end
 end

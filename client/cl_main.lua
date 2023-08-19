@@ -1,5 +1,6 @@
 local xTc = require('modules.client')
 local Utils = require('modules.shared')
+Player = QBCore.Functions.GetPlayerData()
 
 jailTime = 0
 PrisonBreakBlip = nil
@@ -27,6 +28,7 @@ end
 
 -- Player Load --
 local function playerLoaded()
+    Player = QBCore.Functions.GetPlayerData()
     jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
     if jailTime ~= 0 and jailTime > 0 then TriggerEvent('prison:client:Enter', jailTime) end
     if GlobalState.PrisonAlarms then xTc.PrisonAlarm(true) else xTc.PrisonAlarm(false) end
@@ -36,6 +38,7 @@ end
 
 -- Player Unload --
 local function playerUnload()
+    Player = {}
     xTc.RemoveHackZones()
     PrisonZone:remove()
     if DoesBlipExist(PrisonBreakBlip) then RemoveBlip(PrisonBreakBlip) end

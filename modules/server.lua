@@ -1,6 +1,21 @@
 local Utils = require('modules.shared')
 local xTs = {}
 
+function xTs.LiferCheck(source)
+    local Player = QBCore.Functions.GetPlayer(source)
+    local CID = Player.PlayerData.citizenid
+    local jailTime = Player.PlayerData.metadata['injail']
+    local callback = false
+    for _,x in pairs(Config.Lifers) do
+        if CID == x then
+            if jailTime ~= 999 then Player.Functions.SetMetaData('injail', 999) end
+            callback = true
+            break
+        end
+    end
+    return callback
+end
+
 -- Server Log --
 function xTs.Log(logName, color, title, text)
     TriggerEvent("qb-log:server:CreateLog", logName, title, color, text, false, cache.resource) -- Added resource for better logging
