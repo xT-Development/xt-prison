@@ -28,7 +28,6 @@ Config.EnterPrisonAlert  = {
 -- Lifers --
 -- Add player citizenids here
 Config.Lifers = {
-    'WNM66942',
     'EXAMPLECID',
     'EXAMPLECID'
 }

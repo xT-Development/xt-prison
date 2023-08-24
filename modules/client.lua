@@ -1,4 +1,6 @@
 local Utils = require('modules.shared')
+local scully = GetResourceState('scully_emotemenu')
+local rpemotes = GetResourceState('rpemotes')
 local CopsNotified = false
 local HackZone = {}
 local inJail = false
@@ -10,19 +12,22 @@ local xTc = {}
 
 -- Play Emote --
 function xTc.Emote(emote)
-    if emote == nil then Utils.Debug('Play Emote Error', 'Emote is nil!') return end
-    if not exports.scully_emotemenu:playEmoteByCommand(emote) then
+    if scully == 'started' or scully == 'starting' then
+        exports.scully_emotemenu:playEmoteByCommand(emote)
+    end
+    if rpemotes == 'started' or rpemotes == 'starting' then
         TriggerEvent('animations:client:EmoteCommandStart', {emote})
     end
-    Utils.Debug('Play Emote', emote)
 end
 
 -- End Emote --
 function xTc.EndEmote()
-    if not exports.scully_emotemenu:cancelEmote() then
+    if scully == 'started' or scully == 'starting' then
+        exports.scully_emotemenu:cancelEmote()
+    end
+    if rpemotes == 'started' or rpemotes == 'starting' then
         TriggerEvent('animations:client:EmoteCommandStart', {'c'})
     end
-    Utils.Debug('End Emote')
 end
 
 -- Create Prison Zone for Prison Break Distance Checks --
