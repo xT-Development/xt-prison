@@ -103,7 +103,9 @@ AddEventHandler('onResourceStop', function(resource)
     if resource == GetCurrentResourceName() then
         for x = 1, #Config.PrisonBreak.hackZones do
             local door = exports.ox_doorlock:getDoorFromName(Config.PrisonBreak.hackZones[x].gate)
-            TriggerEvent('ox_doorlock:setState', door.id, true)
+            if door then
+                TriggerEvent('ox_doorlock:setState', door.id, true)
+            end
         end
     end
 end)
