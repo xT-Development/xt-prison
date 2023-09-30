@@ -98,11 +98,11 @@ function xTc.EnterPrison(TIME)
 end
 
 -- Exiting Prison --
-function xTc.ExitPrison()
+function xTc.ExitPrison(isUnjailed)
     local getJailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
-    if getJailTime > 0 then
+    if getJailTime > 0 and not isUnjailed then
 		QBCore.Functions.Notify('You still have '..getJailTime..' months left!', 'error')
-	else
+	elseif getJailTime <= 0 or isUnjailed then
         local setJailTime = lib.callback.await('xt-prison:server:SetJailStatus', false, 0)
         if setJailTime then
             jailTime = 0

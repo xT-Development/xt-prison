@@ -9,7 +9,8 @@ PrisonZone = nil
 
 -- Enter / Leave Prison (Keep Backwards Compat) --
 RegisterNetEvent('prison:client:Enter', function(TIME) xTc.EnterPrison(TIME) end)
-RegisterNetEvent('prison:client:Leave', function() xTc.ExitPrison() end)
+RegisterNetEvent('prison:client:Leave', function() xTc.ExitPrison(false) end)
+RegisterNetEvent('prison:client:UnjailPerson', function() xTc.ExitPrison(true) end)
 
 -- Sync Alarm / Toggle Alarm --
 RegisterNetEvent('xt-prison:client:AlarmSync', function(BOOL) xTc.PrisonAlarm(BOOL) end)
