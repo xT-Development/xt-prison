@@ -27,7 +27,7 @@ end)
 -- Remove Items on Entry --
 lib.callback.register('xt-prison:server:RemoveItems', function(source)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(source)
+    local Player = QBCore.Functions.GetPlayer(src)
     local callback = false
     if not Player then return callback end
     local CID = Player.PlayerData.citizenid
@@ -37,8 +37,8 @@ lib.callback.register('xt-prison:server:RemoveItems', function(source)
     if getInv and getInv[1] then
         callback = true
     else
-        if exports.ox_inventory:ConfiscateInventory(source) then
-            QBCore.Functions.Notify(source, 'Your items were confiscated!', 'error')
+        if exports.ox_inventory:ConfiscateInventory(src) then
+            QBCore.Functions.Notify(src, 'Your items were confiscated!', 'error')
             callback = true
         end
     end
@@ -47,9 +47,10 @@ end)
 
 -- Return Items Leaving --
 lib.callback.register('xt-prison:server:ReturnItems', function(source)
+    local src = source
     local callback = false
-    if exports.ox_inventory:ReturnInventory(source) then
-        QBCore.Functions.Notify(source, 'Your items were returned!', 'success')
+    if exports.ox_inventory:ReturnInventory(src) then
+        QBCore.Functions.Notify(src, 'Your items were returned!', 'success')
         callback = true
     end
     return callback
