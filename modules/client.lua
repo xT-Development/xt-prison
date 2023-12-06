@@ -1,6 +1,4 @@
 local Utils = require('modules.shared')
-local scully = GetResourceState('scully_emotemenu')
-local rpemotes = GetResourceState('rpemotes')
 local CopsNotified = false
 local HackZone = {}
 local inJail = false
@@ -9,26 +7,6 @@ local CurrentCops = 0
 RegisterNetEvent('police:SetCopCount', function(amount) CurrentCops = amount end)
 
 local xTc = {}
-
--- Play Emote --
-function xTc.Emote(emote)
-    if scully == 'started' or scully == 'starting' then
-        exports.scully_emotemenu:playEmoteByCommand(emote)
-    end
-    if rpemotes == 'started' or rpemotes == 'starting' then
-        TriggerEvent('animations:client:EmoteCommandStart', {emote})
-    end
-end
-
--- End Emote --
-function xTc.EndEmote()
-    if scully == 'started' or scully == 'starting' then
-        exports.scully_emotemenu:cancelEmote()
-    end
-    if rpemotes == 'started' or rpemotes == 'starting' then
-        TriggerEvent('animations:client:EmoteCommandStart', {'c'})
-    end
-end
 
 -- Create Prison Zone for Prison Break Distance Checks --
 function xTc.PrisonZone()
@@ -71,7 +49,7 @@ function xTc.EnterPrison(TIME)
             SetEntityHeading(cache.ped, RandomSpawn.coords.w)
         end
 
-        xTc.Emote(RandomSpawn.emote)
+        Config.Emote(RandomSpawn.emote)
 
         inJail = true
         jailTime = TIME
@@ -156,7 +134,7 @@ end
 
 -- Start Hacking Terminal --
 function xTc.StartGateHack(ID)
-    xTc.Emote('tablet2')
+    Config.Emote('tablet2')
     TriggerServerEvent('xt-prison:server:TerminalBusyState', ID, true)
     TriggerEvent('ultra-voltlab', Config.PrisonBreak.hackLength, function(result, reason)
         if result == 0 then
@@ -171,7 +149,7 @@ function xTc.StartGateHack(ID)
         end
         local triggerAlarm = lib.callback.await('xt-prison:server:PrisonAlarms', false, true)
         TriggerServerEvent('xt-prison:server:TerminalBusyState', ID, false)
-        xTc.EndEmote()
+        ClearPedTasks(cache.ped)
     end)
 end
 

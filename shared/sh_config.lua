@@ -49,7 +49,7 @@ Config.PrisonBreak = {
     alarmLength = 10, -- Minutes
     terminalCooldowns = 10, -- Cooldown on hacking terminals once they are hacked
     minimumPolice = 0, -- Minimum required police to start prison break
-    hackZones = {
+    hackZones = {   -- Gate = Name of door in ox_doorlock database
         { coords = vec3(1846.05, 2604.7, 45.65), gate = 'prison 1', radius = 0.4, isHacked = false, isBusy = false },
         { coords = vec3(1819.55, 2604.7, 45.6),  gate = 'prison 2', radius = 0.4, isHacked = false, isBusy = false },
         { coords = vec3(1817.4, 2602.7, 45.65),  gate = 'prison 2', radius = 0.4, isHacked = false, isBusy = false },
@@ -57,6 +57,10 @@ Config.PrisonBreak = {
         -- { coords = vec3(1804.75, 2617.65, 45.6), gate = 'prison 3', radius = 0.4, isHacked = false, isBusy = false }
     },
 }
+
+function Config.Emote(emote)
+    -- Emote event/function here
+end
 
 -------------------------------------------------
 
