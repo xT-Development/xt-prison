@@ -1,51 +1,57 @@
-local xTc = require('modules.client')
-local Utils = require('modules.shared')
-Player = QBCore.Functions.GetPlayerData()
+local globalState           = GlobalState
+local prisonModules         = require 'modules.client.prison'
+local prisonBreakModules    = require 'modules.client.prisonbreak'
 
-jailTime = 0
-PrisonBreakBlip = nil
-PrisonBreakRadiusBlip = nil
-PrisonZone = nil
-
--- Enter / Leave Prison (Keep Backwards Compat) --
-RegisterNetEvent('prison:client:Enter', function(TIME) xTc.EnterPrison(TIME) end)
-RegisterNetEvent('prison:client:Leave', function() xTc.ExitPrison(false) end)
-RegisterNetEvent('prison:client:UnjailPerson', function() xTc.ExitPrison(true) end)
-
--- Sync Alarm / Toggle Alarm --
-RegisterNetEvent('xt-prison:client:AlarmSync', function(BOOL) xTc.PrisonAlarm(BOOL) end)
+-- Enter Jail --
+RegisterNetEvent('xt-prison:client:enterJail', function(setTime)
+    prisonModules.enterPrison(setTime)
+end)
 
 -- Jail Player Input Menu --
-if Config.EnableJailCommand then
-    RegisterNetEvent('qb-policejob:client:JailPlayerInput', function()
-        local input = lib.inputDialog('Jail Player', {
-            { type = 'number', label = 'Player Server ID', description = '', icon = 'hashtag' },
-            { type = 'number', label = 'Jail Time', description = 'Months ( Minutes )', icon = 'hashtag' },
-        })
-        if not input then return end
-        TriggerServerEvent("police:server:JailPlayer", input[1], tonumber(input[2]))
-    end)
-end
+lib.callback.register('xt-prison:client:jailPlayerInput', function()
+    local input = lib.inputDialog('Jail Player', {
+        { type = 'number', label = 'Player Server ID', description = '', icon = 'hashtag' },
+        { type = 'number', label = 'Jail Time', description = 'Months ( Minutes )', icon = 'hashtag' },
+    })
+    if not input then return end
+
+    return input
+end)
 
 -- Player Load --
 local function playerLoaded()
-    Player = QBCore.Functions.GetPlayerData()
-    jailTime = lib.callback.await('xt-prison:server:GetJailTime', false)
-    if jailTime ~= 0 and jailTime > 0 then TriggerEvent('prison:client:Enter', jailTime) end
-    if GlobalState.PrisonAlarms then xTc.PrisonAlarm(true) else xTc.PrisonAlarm(false) end
-    xTc.PrisonZone()
-    xTc.HackZones()
+    prisonModules.createPrisonZone()
+    prisonBreakModules.createHackZones()
+    prisonBreakModules.setPrisonAlarm(globalState?.prisonAlarms or false)
+
+    Wait(500)
+
+    local jailTime = lib.callback.await('xt-prison:server:initJailTime', false)
+    if jailTime ~= 0 and jailTime > 0 then
+        prisonModules.enterPrison(jailTime)
+    end
 end
 
--- Player Unload --
-local function playerUnload()
-    Player = {}
-    xTc.RemoveHackZones()
-    PrisonZone:remove()
-    if DoesBlipExist(PrisonBreakBlip) then RemoveBlip(PrisonBreakBlip) end
-end
+-- Handlers --
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    playerLoaded()
+end)
 
-AddEventHandler('onResourceStart', function(resource) if resource == GetCurrentResourceName() then playerLoaded() end end)
-AddEventHandler('onResourceStop', function(resource) if resource == GetCurrentResourceName() then playerUnload() end end)
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function() playerLoaded() end)
-RegisterNetEvent('QBCore:Client:OnPlayerUnload', function() playerUnload() end)
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    prisonModules.prisonCleanup()
+end)
+
+AddEventHandler('xt-prison:client:onLoad', function()
+    playerLoaded()
+end)
+
+AddEventHandler('xt-prison:client:onUnload', function()
+    prisonModules.prisonCleanup()
+end)
+
+AddStateBagChangeHandler('prisonAlarms', nil, function(bagName, _, value)
+    if bagName ~= 'global' then return end
+    prisonBreakModules.setPrisonAlarm(value)
+end)

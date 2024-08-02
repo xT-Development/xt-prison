@@ -1,4 +1,5 @@
-local xTs = require('modules.server')
+local config    = require 'configs.server'
+local utils     = require 'modules.server.utils'
 
 -- Check Jail Time --
 lib.addCommand('jailtime', {
@@ -6,35 +7,62 @@ lib.addCommand('jailtime', {
     params = {},
     restricted = false
 }, function(source, args, raw)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local isLifer = xTs.LiferCheck(src)
-    if isLifer then
-        QBCore.Functions.Notify(src, 'You\'re in jail for life!', 'info')
-    else
-        local jailTime = Player.PlayerData.metadata['injail']
-        if jailTime > 0 then
-            QBCore.Functions.Notify(src, 'You have '..jailTime..' months left.', 'info')
-        elseif jailTime <= 0 then
-            QBCore.Functions.Notify(src, 'You don\'t have any jail time left!', 'info')
-        end
-    end
+    utils.checkJailTime(source)
 end)
 
 
 -- Jail Player Command --
-if Config.EnableJailCommand then
+if config.EnableJailCommand then
     lib.addCommand('jail', {
         help = 'Jail Player',
         params = {},
         restricted = false
     }, function(source, args, _)
-        local src = source
-        local Player = QBCore.Functions.GetPlayer(src)
-        if xTs.isCop(src) then
-            TriggerClientEvent('qb-policejob:client:JailPlayerInput', source)
+        local player = getPlayer(source)
+        if not player then return end
+
+        if utils.isCop(source) then
+            local jailInput = lib.callback.await('xt-prison:client:jailPlayerInput', source)
+            if not jailInput then return end
+
+            local targetSource = tonumber(jailInput[1])
+            local setTime = tonumber(jailInput[2])
+
+            local dist = utils.playerDistanceCheck(source, targetSource)
+            if not dist then return end
+
+            local targetPlayer = getPlayer(targetSource)
+            if not targetPlayer then return end
+
+            local state = Player(targetSource).state
+            if state and state?.jailTime > 0 then
+                if setTime < 0 then
+                    setTime = 0
+                end
+                state.jailTime = setTime
+
+                lib.notify(targetSource, {
+                    title = 'Jail Time Updated',
+                    description = ('Your jail time was set to %s months'):format(setTime),
+                    icon = 'fas fa-lock',
+                    type = 'success',
+                    duration = 5000
+                })
+            else
+                TriggerClientEvent('xt-prison:client:enterJail', targetSource, setTime)
+            end
+
+            lib.notify(source, {
+                title = ('Sent Citizen to Jail for %s Months'):format(setTime),
+                icon = 'fas fa-lock',
+                type = 'success',
+                duration = 5000
+            })
         else
-            QBCore.Functions.Notify(src, 'You don\'t have access to this command!', 'info')
+            lib.notify(source, {
+                title = 'You don\'t have access to this command!',
+                type = 'info'
+            })
         end
     end)
 end

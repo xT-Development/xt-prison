@@ -1,114 +1,117 @@
-local xTs = require('modules.server')
-local Utils = require('modules.shared')
+local db                = require 'modules.server.db'
+local config            = require 'configs.server'
+local prisonBreakcfg    = require 'configs.prisonbreak'
+local utils             = require 'modules.server.utils'
+local prisonModules     = require 'modules.server.prisonbreak'
+local ox_inventory      = exports.ox_inventory
 
--- Prisonbreak Terminal States --
-RegisterNetEvent('xt-prison:server:TerminalHackedState', function(ID, BOOL) xTs.TerminalHackedState(ID, BOOL) end)
-RegisterNetEvent('xt-prison:server:TerminalBusyState', function(ID, BOOL) xTs.TerminalBusyState(ID, BOOL) end)
+local function savePlayerJailTime(source)
+    local CID = getCharID(source)
+    local jailTime = Player(source).state?.jailTime
+    local callback = MySQL.update.await((db.UPDATE_JAILTIME):format(config.PlayersDatabaseTable, config.PlayersDatabaseIdentifier), { jailTime, CID })
+    return callback
+end
 
--- Breakout of Prison --
-RegisterNetEvent('xt-prison:server:Breakout', function() xTs.PrisonBreakout() end)
+local function loadPlayerJailTime(source)
+    local CID = getCharID(source)
+    local getJailTime = MySQL.scalar.await((db.LOAD_JAILTIME):format(config.PlayersDatabaseTable, config.PlayersDatabaseIdentifier), { CID })
+    local setTime = setJailTime(source, getJailTime or 0)
+    return setTime and getJailTime or 0
+end
+
+-- Get Jail Time --
+lib.callback.register('xt-prison:server:initJailTime', function(source)
+    return loadPlayerJailTime(source)
+end)
+
+lib.callback.register('xt-prison:server:saveJailTime', function(source)
+    return savePlayerJailTime(source)
+end)
 
 -- Remove Player Job --
-lib.callback.register('xt-prison:server:RemoveJob', function(source)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local callback = false
-    if Player.PlayerData.job.name ~= "unemployed" then
-        if Player.Functions.SetJob("unemployed") then
-            QBCore.Functions.Notify(src, 'You lost your job!', 'error')
-            callback = true
+lib.callback.register('xt-prison:server:removeJob', function(source)
+    local playerJob = getCharJob(source)
+    if playerJob ~= config.UnemployedJobName then
+        if setCharJob(source, config.UnemployedJobName) then
+            lib.notify(source, {
+                title = 'You lost your job!',
+                icon = 'fas fa-ban',
+                type = 'error'
+            })
+            return true
         end
     else
-        callback = true
+        return true
     end
-    return callback
+
+    return false
 end)
 
 -- Remove Items on Entry --
-lib.callback.register('xt-prison:server:RemoveItems', function(source)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local callback = false
-    if not Player then return callback end
-    local CID = Player.PlayerData.citizenid
-
-    local getInv = MySQL.query.await('SELECT * FROM ox_inventory WHERE owner = ? AND name = ?', { CID, CID })
-
-    if getInv and getInv[1] then
-        callback = true
-    else
-        if exports.ox_inventory:ConfiscateInventory(src) then
-            QBCore.Functions.Notify(src, 'Your items were confiscated!', 'error')
-            callback = true
-        end
+lib.callback.register('xt-prison:server:removeItems', function(source)
+    if ox_inventory:ConfiscateInventory(source) then
+        lib.notify(source, {
+            title = 'Your items were confiscated!',
+            icon = 'fas fa-trash',
+            type = 'error'
+        })
+        return true
     end
-    return callback
+
+    return false
 end)
 
 -- Return Items Leaving --
-lib.callback.register('xt-prison:server:ReturnItems', function(source)
-    local src = source
-    local callback = false
-    if exports.ox_inventory:ReturnInventory(src) then
-        QBCore.Functions.Notify(src, 'Your items were returned!', 'success')
-        callback = true
-    end
-    return callback
-end)
+lib.callback.register('xt-prison:server:returnItems', function(source)
+    local CID = getCharID(source)
+    local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
 
--- Can Hack Terimnal Check --
-lib.callback.register('xt-prison:server:CanHackTerminal', function(source, ID)
-    local zones = Config.PrisonBreak.hackZones
-    local callback = false
-    if not zones[ID].isHacked and not zones[ID].isBusy then callback = true end
-    return callback
+    if getInv and getInv[1] then
+        if ox_inventory:ReturnInventory(source) then
+            lib.notify(source, {
+                title = 'Your items were returned!',
+                icon = 'fas fa-hand-holding-heart',
+                type = 'success'
+            })
+            return true
+        end
+    end
+
+    return false
 end)
 
 -- Set Jail Time --
-lib.callback.register('xt-prison:server:SetJailStatus', function(source, TIME)
+lib.callback.register('xt-prison:server:setJailStatus', function(source, setTime)
     local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local jailTime = Player.PlayerData.metadata['injail']
-    local callback = false
-    if jailTime == TIME then return true end
-    if TIME < 0 then Player.Functions.SetMetaData('injail', 0) return end
-    if jailTime > TIME then
-        Player.Functions.SetMetaData('injail', TIME)
-        callback = true
-    else
-        callback = true
+    local playerState = Player(src)?.state
+    if not playerState then return end
+
+    local jailTime = playerState.jailTime
+    if jailTime == setTime then
+        return true
     end
-    return callback
-end)
 
--- Get Jail Time --
-lib.callback.register('xt-prison:server:GetJailTime', function(source)
-    local src = source
-    local Player = QBCore.Functions.GetPlayer(src)
-    local jailTime = Player.PlayerData.metadata['injail']
-    return jailTime
-end)
+    setJailTime(src, ((setTime < 0) and 0 or setTime))
 
--- Toggle Prison Alarms to GlobalState --
-lib.callback.register('xt-prison:server:PrisonAlarms', function(source, BOOL)
-    if GlobalState.PrisonAlarms == BOOL then return end
-    GlobalState.PrisonAlarms = BOOL
-    if BOOL then TriggerClientEvent('xt-prison:client:AlarmSync', -1, true) xTs.AlarmCountdown() end
-    return
+    return true
 end)
 
 -- Check if Player is a Lifer --
-lib.callback.register('xt-prison:server:LiferCheck', function(source) return xTs.LiferCheck(source) end)
-
-AddEventHandler('onResourceStop', function(resource)
-    if resource == GetCurrentResourceName() then
-        for x = 1, #Config.PrisonBreak.hackZones do
-            local door = exports.ox_doorlock:getDoorFromName(Config.PrisonBreak.hackZones[x].gate)
-            if door then
-                TriggerEvent('ox_doorlock:setState', door.id, true)
-            end
-        end
-    end
+lib.callback.register('xt-prison:server:liferCheck', function(source)
+    return utils.liferCheck(source)
 end)
 
-GlobalState.PrisonAlarms = false
+-- Receive Canteen Meal --
+lib.callback.register('xt-prison:server:receiveCanteenMeal', function(source)
+    local food = config.CanteenMeal.food
+    local drink = config.CanteenMeal.drink
+    if ox_inventory:AddItem(source, food.item, food.count) and ox_inventory:AddItem(source, drink.item, drink.count) then
+        return true
+    end
+    return false
+end)
+
+-- Checks Time Left --
+lib.callback.register('xt-prison:server:checkJailTime', function(source)
+    return utils.checkJailTime(source)
+end)
