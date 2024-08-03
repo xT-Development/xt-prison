@@ -13,9 +13,9 @@ function getCharID(src)
     return player and player.PlayerData.citizenid or nil
 end
 
-function getCharJob(src)
+function charHasJob(src, job)
     local player = getPlayer(src)
-    return player and player.PlayerData.job.name or nil
+    return player and (player.PlayerData.job.name == job) or false
 end
 
 function setCharJob(src, job)

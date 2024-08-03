@@ -13,14 +13,14 @@ function getCharID(src)
     return player and player.identifier or nil
 end
 
-function getCharJob(src)
-    -- TODO
-    return
+function charHasJob(src, job)
+    local player = getPlayer(src)
+    return player and player.groups[group] or false
 end
 
 function setCharJob(src, job)
-    -- TODO
-    return
+    local player = getPlayer(src)
+    return player and player.setJob(job, 0) or nil
 end
 
 function setJailTime(src, time)

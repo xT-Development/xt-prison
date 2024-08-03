@@ -23,14 +23,13 @@ end exports('isLifer', utils.liferCheck)
 
 -- Check if Player is Cop --
 function utils.isCop(source)
-    local playerJob = getCharJob(source)
     local callback = false
     local type = type(config.PoliceJobs)
     if type == 'string' then
-        return (playerJob == config.PoliceJobs)
+        return charHasJob(config.PoliceJobs)
     elseif type == 'table' then
         for x = 1, #config.PoliceJobs do
-            if playerJob == config.PoliceJobs[x] then
+            if charHasJob(config.PoliceJobs[x]) then
                 callback = true
                 break
             end

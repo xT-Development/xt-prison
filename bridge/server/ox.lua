@@ -14,9 +14,9 @@ function getCharID(src)
     return player and player.charId or nil
 end
 
-function getCharJob(src)
-    -- TODO
-    return
+function charHasJob(src, job)
+    local player = getPlayer(src)
+    return player and player.hasGroup(group) or false
 end
 
 function setCharJob(src, job)
