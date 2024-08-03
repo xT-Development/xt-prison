@@ -50,7 +50,7 @@ if config.EnableJailCommand then
                     type = 'success',
                     duration = 5000
                 })
-                notifyTitle = ('Updated %s\'s to Jail for %s Months'):format(getCharName(targetSource), setTime)
+                notifyTitle = ('Updated %s\'s Jail Time to %s Months'):format(getCharName(targetSource), setTime)
             else
                 lib.callback.await('xt-prison:client:enterJail', targetSource, setTime)
             end

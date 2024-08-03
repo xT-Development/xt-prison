@@ -22,4 +22,5 @@ server_scripts {
 files {
     'configs/*.lua',
     'modules/**/*.lua',
+    'bridge/compat/*.lua'
 }

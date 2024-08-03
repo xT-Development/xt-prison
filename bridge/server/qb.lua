@@ -40,15 +40,3 @@ function setJailTime(src, time)
 
     return playerState and (playerState.jailTime == time) or false
 end exports('SetJailTime', setJailTime)
-
--- Compat Event for Police Job --
-RegisterNetEvent('police:server:JailPlayer', function(playerId, time)
-    local src = source
-    local dist = utils.playerDistanceCheck(src, playerId)
-    if not dist then return end
-
-    if not utils.isCop(src) then return end
-
-    TriggerClientEvent('prison:client:Enter', playerId, time)
-    lib.notify(src, { title = ('Sent to Jail for %s Months'):format(time), type = 'success' })
-end)
