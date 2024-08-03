@@ -5,10 +5,10 @@ if GetResourceState('es_extended') ~= 'started' then return end
     - Add compat events for jailing (if there is any)
 ]]
 
-AddEventHandler('esx:playerLoaded', function()
+RegisterNetEvent('esx:playerLoaded', function()
     TriggerEvent('xt-prison:client:onLoad')
 end)
 
-AddEventHandler('esx:onPlayerLogout', function()
+RegisterNetEvent('esx:onPlayerLogout', function()
     TriggerEvent('xt-prison:client:onUnload')
 end)
