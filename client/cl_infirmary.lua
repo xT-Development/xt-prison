@@ -42,6 +42,7 @@ local function removePrisonDoctor()
         return
     end
 
+    exports.ox_target:removeLocalEntity(prisonDoc, 'Receive Check-Up')
     DeletePed(prisonDoc)
     RemoveBlip(prisonDocBlip)
 end
