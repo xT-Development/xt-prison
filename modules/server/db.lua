@@ -4,8 +4,8 @@ local ox = (GetResourceState('ox_core') == 'started')
 local nd = lib.checkDependency('ND_Core', '2.0.0')
 
 local db = {
-    table = qb and 'players' or esx and 'users' or nd and 'nd_characters' or ox and 'users',
-    identifier = qb and 'citizenid' or esx and 'identifier' or nd and 'charid' or ox and 'userid',
+    table = qb and 'players' or esx and 'users' or nd and 'nd_characters' or ox and 'characters',
+    identifier = qb and 'citizenid' or esx and 'identifier' or nd and 'charid' or ox and 'charid',
 }
 
 return {
