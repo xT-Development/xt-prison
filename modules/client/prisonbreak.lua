@@ -1,13 +1,17 @@
 local config            = require 'configs.client'
 local prisonBreakcfg    = require 'configs.prisonbreak'
 local utils             = require 'modules.client.utils'
+local globalState       = GlobalState
 
 local PrisonBreakBlip
 local HackZones = {}
 
-CurrentCops = 0
-
 local prisonBreakModules = {}
+
+function prisonBreakModules.canHackTerminal(terminalID)
+    local terminal = globalState[('PrisonTerminal_%s'):format(terminalID)]
+    return (not terminal?.isHacked and not terminal?.isBusy) and true or false
+end
 
 -- Create Prisonbreak Hacking Zones --
 function prisonBreakModules.createHackZones()
@@ -27,8 +31,8 @@ function prisonBreakModules.createHackZones()
                         prisonBreakModules.startGateHack(x)
                     end,
                     canInteract = function()
-                        local canHack = lib.callback.await('xt-prison:server:canHackTerminal', false, x)
-                        return ((CurrentCops >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
+                        local canHack = prisonBreakModules.canHackTerminal(x)
+                        return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
                     end
                 }
             }

@@ -43,12 +43,6 @@ lib.callback.register('xt-prison:server:removePrisonbreakItems', function(source
     return callback
 end)
 
--- Can Hack Terimnal Check --
-lib.callback.register('xt-prison:server:canHackTerminal', function(source, terminalID)
-    local terminal = globalState[('PrisonTerminal_%s'):format(terminalID)]
-    return (not terminal?.isHacked and not terminal?.isBusy) and true or false
-end)
-
 -- Breakout of Prison --
 lib.callback.register('xt-prison:server:triggerBreakout', function(source)
     return prisonModules.prisonBreakout()
