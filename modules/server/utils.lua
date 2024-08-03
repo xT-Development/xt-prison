@@ -26,10 +26,10 @@ function utils.isCop(source)
     local callback = false
     local type = type(config.PoliceJobs)
     if type == 'string' then
-        return charHasJob(config.PoliceJobs)
+        return charHasJob(source, config.PoliceJobs)
     elseif type == 'table' then
         for x = 1, #config.PoliceJobs do
-            if charHasJob(config.PoliceJobs[x]) then
+            if charHasJob(source, config.PoliceJobs[x]) then
                 callback = true
                 break
             end

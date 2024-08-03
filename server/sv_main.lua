@@ -31,8 +31,7 @@ end)
 
 -- Remove Player Job --
 lib.callback.register('xt-prison:server:removeJob', function(source)
-    local playerJob = getCharJob(source)
-    if playerJob ~= config.UnemployedJobName then
+    if charHasJob(source, config.UnemployedJobName) then
         if setCharJob(source, config.UnemployedJobName) then
             lib.notify(source, {
                 title = 'You lost your job!',
