@@ -117,24 +117,24 @@ return {
 
     -- Reloads Player's Last Skin When Freed --
     ResetClothing = function()
-        TriggerEvent('illenium-appearance:client:reloadSkin', true)
+        -- TriggerEvent('illenium-appearance:client:reloadSkin', true)
     end,
 
     -- Triggered on Player Heal --
     PlayerHealed = function()
-        TriggerEvent('hospital:client:Revive')
+        -- TriggerEvent('hospital:client:Revive')
         -- TriggerEvent('osp_ambulance:partialRevive')
     end,
 
     -- Trigger Emote --
     Emote = function(emote)
-        exports.scully_emotemenu:playEmoteByCommand(emote)
-        --exports["rpemotes"]:EmoteCommandStart(emote)
+        -- exports.scully_emotemenu:playEmoteByCommand(emote)
+        -- exports["rpemotes"]:EmoteCommandStart(emote)
     end,
 
     -- Trigger Prison Break Dispatch --
     Dispatch = function(coords)
-        exports['ps-dispatch']:PrisonBreak()
+        -- exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
     end,
 }
