@@ -4,6 +4,7 @@ local prisonBreakcfg    = require 'configs.prisonbreak'
 local utils             = require 'modules.server.utils'
 local prisonModules     = require 'modules.server.prisonbreak'
 local ox_inventory      = exports.ox_inventory
+local globalState       = GlobalState
 
 local function savePlayerJailTime(source)
     local CID = getCharID(source)
@@ -114,4 +115,28 @@ end)
 -- Checks Time Left --
 lib.callback.register('xt-prison:server:checkJailTime', function(source)
     return utils.checkJailTime(source)
+end)
+
+-- Constantly Update Cop Count --
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    if prisonBreakcfg.MinimumPolice == 0 then
+        globalState.copCount = 0
+        return
+    end
+
+    SetInterval(function()
+        local players = GetPlayers()
+        local count = 0
+
+        for _, src in pairs(players) do
+            if charHasJob(tonumber(src), config.policeJobs) then
+                count += 1
+            end
+        end
+
+        if globalState.copCount ~= count then
+            globalState.copCount = count
+        end
+    end, 120000)
 end)

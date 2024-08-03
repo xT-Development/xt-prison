@@ -10,8 +10,6 @@ local mainBlip
 local PrisonZone
 local CheckOutZone
 
-CurrentCops = 0
-
 local prisonModules = {}
 
 -- Set Jail Time --
