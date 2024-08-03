@@ -39,7 +39,7 @@ function setJailTime(src, time)
     Wait(100)
 
     return playerState and (playerState.jailTime == time) or false
-end
+end exports('SetJailTime', setJailTime)
 
 -- Compat Event for Police Job --
 RegisterNetEvent('police:server:JailPlayer', function(playerId, time)

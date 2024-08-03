@@ -36,4 +36,4 @@ function setJailTime(src, time)
     playerState.jailTime = time
 
     return playerState and (playerState.jailTime == time) or false
-end
+end exports('SetJailTime', setJailTime)
