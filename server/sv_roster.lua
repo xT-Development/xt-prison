@@ -20,7 +20,7 @@ lib.callback.register('xt-prison:server:unjailPlayerByRoster', function(source, 
 
     local state = Player(targetSource).state
     if state and state.jailTime > 0 then
-        state.jailTime = 0
+        setJailTime(targetSource, 0)
 
         lib.notify(targetSource, {
             title = 'Freedom!',
@@ -41,7 +41,7 @@ lib.callback.register('xt-prison:server:changePlayerJailTimeByRoster', function(
 
     local state = Player(targetSource).state
     if state and state.jailTime > 0 then
-        state.jailTime = newTime
+        setJailTime(targetSource, newTime)
 
         lib.notify(targetSource, {
             title = 'New Jail Time',

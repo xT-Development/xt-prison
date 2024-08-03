@@ -40,7 +40,8 @@ if config.EnableJailCommand then
                 if setTime < 0 then
                     setTime = 0
                 end
-                state.jailTime = setTime
+
+                setJailTime(targetSource, setTime)
 
                 lib.notify(targetSource, {
                     title = 'Jail Time Updated',
