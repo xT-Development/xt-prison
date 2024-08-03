@@ -9,13 +9,13 @@ local globalState       = GlobalState
 local function savePlayerJailTime(source)
     local CID = getCharID(source)
     local jailTime = Player(source).state?.jailTime
-    local callback = MySQL.update.await((db.UPDATE_JAILTIME):format(config.PlayersDatabaseTable, config.PlayersDatabaseIdentifier), { jailTime, CID })
+    local callback = MySQL.update.await(db.UPDATE_JAILTIME, { jailTime, CID })
     return callback
 end
 
 local function loadPlayerJailTime(source)
     local CID = getCharID(source)
-    local getJailTime = MySQL.scalar.await((db.LOAD_JAILTIME):format(config.PlayersDatabaseTable, config.PlayersDatabaseIdentifier), { CID })
+    local getJailTime = MySQL.scalar.await(db.LOAD_JAILTIME, { CID })
     local setTime = setJailTime(source, getJailTime or 0)
     return setTime and getJailTime or 0
 end
