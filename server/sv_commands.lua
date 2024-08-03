@@ -34,6 +34,7 @@ if config.EnableJailCommand then
             local targetPlayer = getPlayer(targetSource)
             if not targetPlayer then return end
 
+            local notifyTitle = ('Sent %s to Jail for %s Months'):format(getCharName(targetSource), setTime)
             local state = Player(targetSource).state
             if state and state?.jailTime > 0 then
                 if setTime < 0 then
@@ -48,12 +49,13 @@ if config.EnableJailCommand then
                     type = 'success',
                     duration = 5000
                 })
+                notifyTitle = ('Updated %s\'s to Jail for %s Months'):format(getCharName(targetSource), setTime)
             else
-                TriggerClientEvent('xt-prison:client:enterJail', targetSource, setTime)
+                lib.callback.await('xt-prison:client:enterJail', targetSource, setTime)
             end
 
             lib.notify(source, {
-                title = ('Sent Citizen to Jail for %s Months'):format(setTime),
+                title = notifyTitle,
                 icon = 'fas fa-lock',
                 type = 'success',
                 duration = 5000

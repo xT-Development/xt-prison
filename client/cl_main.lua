@@ -2,9 +2,12 @@ local globalState           = GlobalState
 local prisonModules         = require 'modules.client.prison'
 local prisonBreakModules    = require 'modules.client.prisonbreak'
 
--- Enter Jail --
-RegisterNetEvent('xt-prison:client:enterJail', function(setTime)
-    prisonModules.enterPrison(setTime)
+lib.callback.register('xt-prison:client:enterJail', function(setTime)
+    return prisonModules.enterPrison(setTime)
+end)
+
+lib.callback.register('xt-prison:client:exitJail', function(isUnjailed)
+    return prisonModules.exitPrison(isUnjailed)
 end)
 
 -- Jail Player Input Menu --

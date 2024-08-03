@@ -108,7 +108,7 @@ function prisonModules.enterPrison(setTime)
     if config.RemoveJob then
         local removed = lib.callback.await('xt-prison:server:removeJob', false)
         if not removed then
-            return
+            return false
         end
     end
 
@@ -154,13 +154,18 @@ function prisonModules.enterPrison(setTime)
         if not isLifer then
             prisonModules.timeReductionLoop()
         end
+
+        return true
     end
+
+    return false
 end
 
 -- Exiting Prison --
 function prisonModules.exitPrison(isUnjailed)
     if playerState.jailTime > 0 and not isUnjailed then
         lib.notify({ title = ('You still have %s months left!'):format(playerState.jailTime), type = 'error' })
+        return false
 	elseif playerState.jailTime <= 0 or isUnjailed then
         local setJailTime = prisonModules.setJailTime(0)
         if setJailTime then
@@ -180,8 +185,12 @@ function prisonModules.exitPrison(isUnjailed)
             while not IsScreenFadedIn() do Wait(25) end
 
             local returnItems = lib.callback.await('xt-prison:server:returnItems', false)
+
+            return true
         end
 	end
+
+    return false
 end
 
 -- Reduce Jail Time Loop --
