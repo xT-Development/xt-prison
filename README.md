@@ -14,7 +14,11 @@
 - Canteen ped providing players with a drink and food item
 - Doctor ped providing players with check-ups for heals/revives
   - Configurable function for devs to utilize their health/medical resources
-- Configurable to work with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) (Currently a WIP)
+- Prisoners roster
+  - View a list of people currently in prison
+  - Control their jail time
+  - Unjail them
+- Configurable to work with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) (Currently a WIP, only works w/ QB/QBX)
 
 # Prison Break Features:
 - Global statebags for prison break alarms and all prison gate terminals
@@ -33,9 +37,9 @@
 
 # Supported Frameworks:
 - 🟩 | QB / QBX
-- 🟨 | ESX (WIP - Bridge incomplete)
-- 🟨 | OX (WIP - Bridge incomplete)
-- 🟨 | ND (WIP - Bridge incomplete)
+- 🟩 | ESX
+- 🟩 | OX
+- 🟩 | ND
 
 # [Documentation](https://xtdev.gitbook.io/xt-docs/free-resources/xt-prison)
 
