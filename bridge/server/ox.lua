@@ -16,12 +16,12 @@ end
 
 function charHasJob(src, job)
     local player = getPlayer(src)
-    return player and player.hasGroup(group) or false
+    return player and player.hasGroup(job) or false
 end
 
 function setCharJob(src, job)
-    -- TODO
-    return
+    local player = getPlayer(src)
+    return player and player.setGroup(job, 0) or false
 end
 
 function setJailTime(src, time)
