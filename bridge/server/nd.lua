@@ -13,6 +13,11 @@ function getCharID(src)
     return player and player.identifier or nil
 end
 
+function getCharName(src)
+    local player = getPlayer(src)
+    return player.fullname
+end
+
 function charHasJob(src, job)
     local player = getPlayer(src)
     return player and player.groups[group] or false

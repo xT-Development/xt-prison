@@ -13,6 +13,12 @@ function getCharID(src)
     return player and player.PlayerData.citizenid or nil
 end
 
+function getCharName(src)
+    local player = getPlayer(src)
+    local playerData = player.PlayerData
+    return ("%s %s"):format(playerData.charinfo.firstname, playerData.charinfo.lastname)
+end
+
 function charHasJob(src, job)
     local player = getPlayer(src)
     return player and (player.PlayerData.job.name == job) or false
