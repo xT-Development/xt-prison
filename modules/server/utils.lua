@@ -95,4 +95,28 @@ function utils.checkJailTime(source)
     return jailTime
 end
 
+function utils.generateJailRoster()
+    local roster = {}
+    local players = GetPlayers()
+
+    for _, src in pairs(players) do
+        local state = Player(tonumber(src)).state
+        if state and state.jailTime > 0 then
+            local charName = getCharName(tonumber(src))
+            roster[#roster + 1] = {
+                title = charName,
+                description = ('Jail Time: %s Months'):format(state.jailTime),
+                icon = 'fas fa-user-lock',
+                private = {
+                    source = src,
+                    name = charName,
+                    jailTime = state.jailTime
+                }
+            }
+        end
+    end
+
+    return roster
+end
+
 return utils
