@@ -25,6 +25,7 @@ lib.callback.register('xt-prison:server:initJailTime', function(source)
     return loadPlayerJailTime(source)
 end)
 
+-- Save Jail Time --
 lib.callback.register('xt-prison:server:saveJailTime', function(source)
     return savePlayerJailTime(source)
 end)
@@ -61,7 +62,7 @@ lib.callback.register('xt-prison:server:removeItems', function(source)
     return false
 end)
 
--- Return Items Leaving --
+-- Return Items on Exit --
 lib.callback.register('xt-prison:server:returnItems', function(source)
     local CID = getCharID(source)
     local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
