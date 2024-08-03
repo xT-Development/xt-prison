@@ -61,6 +61,7 @@ end
 
 RegisterCommand('prisoners', function()
     local jailRoster = lib.callback.await('xt-prison:server:getJailRoster', false)
+    if not jailRoster then return end
 
     if not jailRoster[1] then
         jailRoster = {
