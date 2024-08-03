@@ -14,7 +14,7 @@
 - Canteen ped providing players with a drink and food item
 - Doctor ped providing players with check-ups for heals/revives
   - Configurable function for devs to utilize their health/medical resources
-- Configurable to work with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) (Currently)
+- Configurable to work with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) (Currently a WIP)
 
 # Prison Break Features:
 - Global statebags for prison break alarms and all prison gate terminals
