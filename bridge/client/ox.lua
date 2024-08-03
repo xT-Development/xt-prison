@@ -5,11 +5,6 @@ local import = LoadResourceFile('ox_core', file)
 local chunk = assert(load(import, ('@@ox_core/%s'):format(file)))
 chunk()
 
---[[
-    TO-DO:
-    - Add compat events for jailing (if there is any)
-]]
-
 AddEventHandler('ox:playerLoaded', function()
     TriggerEvent('xt-prison:client:onLoad')
 end)
