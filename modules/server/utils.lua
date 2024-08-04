@@ -108,7 +108,7 @@ function utils.generateJailRoster()
                 description = ('Jail Time: %s Months'):format(state.jailTime),
                 icon = 'fas fa-user-lock',
                 private = {
-                    source = src,
+                    source = tonumber(src),
                     name = charName,
                     jailTime = state.jailTime
                 }
