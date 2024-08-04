@@ -6,17 +6,18 @@ local prisonModules     = require 'modules.server.prisonbreak'
 local ox_inventory      = exports.ox_inventory
 local globalState       = GlobalState
 
-local function savePlayerJailTime(source)
-    local CID = getCharID(source)
-    local jailTime = Player(source).state?.jailTime
-    local callback = MySQL.update.await(db.UPDATE_JAILTIME, { jailTime, CID })
+local function savePlayerJailTime(src, cid)
+    cid = cid or getCharID(src)
+    local state = Player(src).state
+    local jailTime = state and state.jailTime or 0
+    local callback = MySQL.update.await(db.UPDATE_JAILTIME, { jailTime, cid })
     return callback
 end
 
-local function loadPlayerJailTime(source)
-    local CID = getCharID(source)
+local function loadPlayerJailTime(src)
+    local CID = getCharID(src)
     local getJailTime = MySQL.scalar.await(db.LOAD_JAILTIME, { CID })
-    local setTime = setJailTime(source, getJailTime or 0)
+    local setTime = setJailTime(src, getJailTime or 0)
     return setTime and getJailTime or 0
 end
 
@@ -139,4 +140,10 @@ AddEventHandler('onResourceStart', function(resource)
             globalState.copCount = count
         end
     end, 120000)
+end)
+
+AddEventHandler('playerDropped', function(reason)
+    local src = source
+    local cid = getCharID(src)
+    savePlayerJailTime(src, cid)
 end)
