@@ -43,7 +43,8 @@ local function removeCanteen()
     if not DoesEntityExist(canteenPed) and not DoesBlipExist(canteenBlip) then
         return
     end
-
+    
+    exports.ox_target:removeLocalEntity(canteenPed, 'Receive Meal')
     DeletePed(canteenPed)
     RemoveBlip(canteenBlip)
 end
