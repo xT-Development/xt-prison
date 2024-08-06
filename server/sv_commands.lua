@@ -32,7 +32,12 @@ if config.EnableJailCommand then
             if not dist then return end
 
             local targetPlayer = getPlayer(targetSource)
-            if not targetPlayer then return end
+            if not targetPlayer then
+                return lib.notify(source, {
+                    title = 'Invalid Player!',
+                    type = 'error'
+                })
+            end
 
             local notifyTitle = ('Sent %s to Jail for %s Months'):format(getCharName(targetSource), setTime)
             local state = Player(targetSource).state
