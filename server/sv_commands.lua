@@ -36,7 +36,7 @@ if config.EnableJailCommand then
 
             local notifyTitle = ('Sent %s to Jail for %s Months'):format(getCharName(targetSource), setTime)
             local state = Player(targetSource).state
-            if state and state?.jailTime > 0 then
+            if state?.jailTime and state?.jailTime > 0 then
                 if setTime < 0 then
                     setTime = 0
                 end

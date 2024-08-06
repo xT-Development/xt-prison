@@ -74,7 +74,7 @@ function utils.checkJailTime(source)
         })
         return 999
     else
-        jailTime = playerState.jailTime
+        jailTime = playerState.jailTime or 0
         if jailTime > 0 then
             lib.notify(source, {
                 title = 'Jail Time',
