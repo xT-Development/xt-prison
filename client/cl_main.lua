@@ -13,8 +13,8 @@ end)
 -- Jail Player Input Menu --
 lib.callback.register('xt-prison:client:jailPlayerInput', function()
     local input = lib.inputDialog('Jail Player', {
-        { type = 'number', label = 'Player Server ID', icon = 'user' },
-        { type = 'number', label = 'Jail Time', description = 'Months ( Minutes )', icon = 'hourglass' },
+        { type = 'number', label = 'Player Server ID', icon = 'user', required = true },
+        { type = 'number', label = 'Jail Time', description = 'Months ( Minutes )', icon = 'hourglass', default = 0, min = 0, required = true },
     })
     if not input then return end
 
