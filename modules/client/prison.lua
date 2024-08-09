@@ -30,7 +30,7 @@ function prisonModules.createCheckoutLocation()
     else
         local checkoutInfo = config.CheckOut
 
-        if config.useOx then
+        if config.useOxtarget then
             CheckOutZone = exports.ox_target:addBoxZone({
                 coords = checkoutInfo.coords,
                 size = checkoutInfo.size,
@@ -82,7 +82,7 @@ function prisonModules.removeCheckoutLocation()
     if config.XTPrisonJobs then
         exports['xt-prisonjobs']:CleanupPrisonJobs()
     else
-        if config.useOx then
+        if config.useOxtarget then
             exports.ox_target:removeZone(CheckOutZone)
         else
             exports['qb-target']:RemoveZone("CheckOutZone")

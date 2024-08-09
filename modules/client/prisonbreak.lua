@@ -20,7 +20,7 @@ function prisonBreakModules.createHackZones()
     for x = 1, #prisonBreakcfg.HackZones do
         local zoneInfo = prisonBreakcfg.HackZones[x]
 
-        if config.useOx then
+        if config.useOxtarget then
             HackZones[x] = exports.ox_target:addSphereZone({
                 coords = zoneInfo.coords,
                 radius = zoneInfo.radius,
@@ -81,7 +81,7 @@ end
 
 function prisonBreakModules.removeHackZones()
     for x = 1, #HackZones do
-        if config.useOx then
+        if config.useOxtarget then
             exports.ox_target:removeZone(HackZones[x])
         else
             exports['qb-target']:RemoveZone("HackZone"..x)
