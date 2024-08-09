@@ -3,7 +3,7 @@ return {
     XTPrisonJobs = false,       -- Enable if using xt-prisonjobs (THIS DOES NOT WORK AT THE MOMENT, PRISONJOBS NEEDS UPDATED TO PRISON V2)
     Freedom = vec4(1842.58, 2573.43, 45.89, 357.77), -- Freedom spawn coords
     RemoveJob = true,          -- Remove player jobs when send to jail
-
+    useOxtarget = false,
     -- Create Target Zone to Check Time (if XTPrisonJobs is false) --
     CheckOut = {
         coords = vec3(1836.5, 2592.05, 46.35),
@@ -122,19 +122,19 @@ return {
 
     -- Triggered on Player Heal --
     PlayerHealed = function()
-        -- TriggerEvent('hospital:client:Revive')
+        TriggerEvent('hospital:client:Revive')
         -- TriggerEvent('osp_ambulance:partialRevive')
     end,
 
     -- Trigger Emote --
     Emote = function(emote)
         -- exports.scully_emotemenu:playEmoteByCommand(emote)
-        -- exports["rpemotes"]:EmoteCommandStart(emote)
+        exports["rpemotes"]:EmoteCommandStart(emote)
     end,
 
     -- Trigger Prison Break Dispatch --
     Dispatch = function(coords)
-        -- exports['ps-dispatch']:PrisonBreak()
+        exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
     end,
 }

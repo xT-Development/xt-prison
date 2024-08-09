@@ -14,31 +14,63 @@ function prisonBreakModules.canHackTerminal(terminalID)
 end
 
 -- Create Prisonbreak Hacking Zones --
+
+
 function prisonBreakModules.createHackZones()
     for x = 1, #prisonBreakcfg.HackZones do
         local zoneInfo = prisonBreakcfg.HackZones[x]
-        HackZones[x] = exports.ox_target:addSphereZone({
-            coords = zoneInfo.coords,
-            radius = zoneInfo.radius,
-            debug = config.DebugPoly,
-            drawsprite = true,
-            options = {
-                {
-                    label = 'Hack Prison Gate',
-                    icon = 'fas fa-laptop-code',
-                    items = prisonBreakcfg.RequiredItems,
-                    onSelect = function()
-                        prisonBreakModules.startGateHack(x)
-                    end,
-                    canInteract = function()
-                        local canHack = prisonBreakModules.canHackTerminal(x)
-                        return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
-                    end
+
+        if config.useOx then
+            HackZones[x] = exports.ox_target:addSphereZone({
+                coords = zoneInfo.coords,
+                radius = zoneInfo.radius,
+                debug = config.DebugPoly,
+                drawsprite = true,
+                options = {
+                    {
+                        label = 'Hack Prison Gate',
+                        icon = 'fas fa-laptop-code',
+                        items = prisonBreakcfg.RequiredItems,
+                        onSelect = function()
+                            prisonBreakModules.startGateHack(x)
+                        end,
+                        canInteract = function()
+                            local canHack = prisonBreakModules.canHackTerminal(x)
+                            return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
+                        end
+                    }
                 }
-            }
-        })
+            })
+        else
+            HackZones[x] = exports['qb-target']:AddCircleZone("HackZone"..x, zoneInfo.coords, zoneInfo.radius, {
+                name = "HackZone"..x,
+                debugPoly = config.DebugPoly,
+                useZ = true,
+            }, {
+                options = {
+                    {
+                        type = "client",
+                        event = "startGateHack",
+                        icon = "fas fa-laptop-code",
+                        label = "Hack Prison Gate",
+                        item = prisonBreakcfg.RequiredItems,
+                        action = function()
+                            prisonBreakModules.startGateHack(x)
+                        end,
+                        canInteract = function()
+                            local canHack = prisonBreakModules.canHackTerminal(x)
+                            return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
+                        end
+                    },
+                },
+                distance = 2.5
+            })
+        end
     end
 end
+
+
+
 
 function prisonBreakModules.removeBlip()
     if DoesBlipExist(PrisonBreakBlip) then
@@ -46,11 +78,17 @@ function prisonBreakModules.removeBlip()
     end
 end
 
+
 function prisonBreakModules.removeHackZones()
     for x = 1, #HackZones do
-        exports.ox_target:removeZone(HackZones[x])
+        if config.useOx then
+            exports.ox_target:removeZone(HackZones[x])
+        else
+            exports['qb-target']:RemoveZone("HackZone"..x)
+        end
     end
 end
+
 
 function prisonBreakModules.startGateHack(ID)
     config.Emote('tablet2')
