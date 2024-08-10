@@ -1,6 +1,7 @@
 local config            = require 'configs.client'
 local prisonBreakcfg    = require 'configs.prisonbreak'
 local utils             = require 'modules.client.utils'
+local resources         = require 'bridge.compat.resources'
 local globalState       = GlobalState
 
 local PrisonBreakBlip
@@ -17,26 +18,52 @@ end
 function prisonBreakModules.createHackZones()
     for x = 1, #prisonBreakcfg.HackZones do
         local zoneInfo = prisonBreakcfg.HackZones[x]
-        HackZones[x] = exports.ox_target:addSphereZone({
-            coords = zoneInfo.coords,
-            radius = zoneInfo.radius,
-            debug = config.DebugPoly,
-            drawsprite = true,
-            options = {
-                {
-                    label = 'Hack Prison Gate',
-                    icon = 'fas fa-laptop-code',
-                    items = prisonBreakcfg.RequiredItems,
-                    onSelect = function()
-                        prisonBreakModules.startGateHack(x)
-                    end,
-                    canInteract = function()
-                        local canHack = prisonBreakModules.canHackTerminal(x)
-                        return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
-                    end
+        if resources.qb_target then
+            HackZones[x] = exports['qb-target']:AddCircleZone(("HackZone_%s"):format(x), zoneInfo.coords, zoneInfo.radius, {
+                name = ("HackZone_%s"):format(x),
+                debugPoly = config.DebugPoly,
+                useZ = true,
+            }, {
+                options = {
+                    {
+                        type = "client",
+                        event = "startGateHack",
+                        icon = "fas fa-laptop-code",
+                        label = "Hack Prison Gate",
+                        item = prisonBreakcfg.RequiredItems,
+                        action = function()
+                            prisonBreakModules.startGateHack(x)
+                        end,
+                        canInteract = function()
+                            local canHack = prisonBreakModules.canHackTerminal(x)
+                            return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
+                        end
+                    },
+                },
+                distance = 2.5
+            })
+        else
+            HackZones[x] = exports.ox_target:addSphereZone({
+                coords = zoneInfo.coords,
+                radius = zoneInfo.radius,
+                debug = config.DebugPoly,
+                drawsprite = true,
+                options = {
+                    {
+                        label = 'Hack Prison Gate',
+                        icon = 'fas fa-laptop-code',
+                        items = prisonBreakcfg.RequiredItems,
+                        onSelect = function()
+                            prisonBreakModules.startGateHack(x)
+                        end,
+                        canInteract = function()
+                            local canHack = prisonBreakModules.canHackTerminal(x)
+                            return ((globalState.copCount >= prisonBreakcfg.MinimumPolice) and canHack) and true or false
+                        end
+                    }
                 }
-            }
-        })
+            })
+        end
     end
 end
 
@@ -48,7 +75,11 @@ end
 
 function prisonBreakModules.removeHackZones()
     for x = 1, #HackZones do
-        exports.ox_target:removeZone(HackZones[x])
+        if resources.qb_target then
+            exports['qb-target']:RemoveZone(("HackZone_%s"):format(x))
+        else
+            exports.ox_target:removeZone(HackZones[x])
+        end
     end
 end
 

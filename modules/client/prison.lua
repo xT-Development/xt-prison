@@ -3,6 +3,7 @@ local config                = require 'configs.client'
 local prisonBreakcfg        = require 'configs.prisonbreak'
 local prisonBreakModules    = require 'modules.client.prisonbreak'
 local utils                 = require 'modules.client.utils'
+local resources             = require 'bridge.compat.resources'
 
 local inJail = false
 
@@ -30,25 +31,51 @@ function prisonModules.createCheckoutLocation()
         exports['xt-prisonjobs']:SetupPrisonJobs()
     else
         local checkoutInfo = config.CheckOut
-        CheckOutZone = exports.ox_target:addBoxZone({
-            coords = checkoutInfo.coords,
-            size = checkoutInfo.size,
-            rotation = checkoutInfo.rotation,
-            debug = config.DebugPoly,
-            drawsprite = true,
-            options = {
-                {
-                    label = 'Check Time',
-                    icon = 'fas fa-hourglass-start',
-                    onSelect = function()
-                        local timeLeft = lib.callback.await('xt-prison:server:checkJailTime', false)
-                        if timeLeft <= 0 then
-                            prisonModules.exitPrison(true)
+        if resources.qb_target then
+            CheckOutZone = exports['qb-target']:AddBoxZone("CheckOutZone", checkoutInfo.coords, checkoutInfo.size[1], checkoutInfo.size[2], {
+                name = "CheckOutZone",
+                heading = checkoutInfo.rotation,
+                debugPoly = config.DebugPoly,
+                minZ = checkoutInfo.minZ,
+                maxZ = checkoutInfo.maxZ,
+            }, {
+                options = {
+                    {
+                        type = "client",
+                        event = "checkTime",
+                        icon = "fas fa-hourglass-start",
+                        label = "Check Time",
+                        action = function()
+                            local timeLeft = lib.callback.await('xt-prison:server:checkJailTime', false)
+                            if timeLeft <= 0 then
+                                prisonModules.exitPrison(true)
+                            end
                         end
-                    end
+                    },
+                },
+                distance = 2.5
+            })
+        else
+            CheckOutZone = exports.ox_target:addBoxZone({
+                coords = checkoutInfo.coords,
+                size = checkoutInfo.size,
+                rotation = checkoutInfo.rotation,
+                debug = config.DebugPoly,
+                drawsprite = true,
+                options = {
+                    {
+                        label = 'Check Time',
+                        icon = 'fas fa-hourglass-start',
+                        onSelect = function()
+                            local timeLeft = lib.callback.await('xt-prison:server:checkJailTime', false)
+                            if timeLeft <= 0 then
+                                prisonModules.exitPrison(true)
+                            end
+                        end
+                    }
                 }
-            }
-        })
+            })
+        end
     end
 end
 
@@ -57,7 +84,11 @@ function prisonModules.removeCheckoutLocation()
     if config.XTPrisonJobs then
         exports['xt-prisonjobs']:CleanupPrisonJobs()
     else
-        exports.ox_target:removeZone(CheckOutZone)
+        if resources.qb_target then
+            exports['qb-target']:RemoveZone("CheckOutZone")
+        else
+            exports.ox_target:removeZone(CheckOutZone)
+        end
     end
 end
 
