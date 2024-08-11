@@ -105,7 +105,7 @@ function utils.generateJailRoster()
             local charName = getCharName(tonumber(src))
             roster[#roster + 1] = {
                 title = charName,
-                description = ('Jail Time: %s Months'):format(state.jailTime),
+                description = ('Time Remaining: %s Months'):format(state.jailTime),
                 icon = 'fas fa-user-lock',
                 private = {
                     source = tonumber(src),

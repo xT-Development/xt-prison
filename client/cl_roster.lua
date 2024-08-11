@@ -1,3 +1,6 @@
+local config = lib.load('configs.client')
+local rosterZone
+
 -- Unjail Player --
 local function unjailConfirmation(info)
     local confirmation = lib.alertDialog({
@@ -84,4 +87,68 @@ RegisterCommand('prisoners', function()
         options = jailRoster
     })
     lib.showContext('prisoners_roster')
+end)
+
+local function openPublicRoster()
+    local jailRoster = lib.callback.await('xt-prison:server:getJailRoster', false)
+    if not jailRoster then return end
+
+    if not jailRoster[1] then
+        jailRoster = {
+            {
+                title = 'No Prisoners!',
+                readOnly = true
+            }
+        }
+    else
+        for x = 1, #jailRoster do
+            jailRoster[x].readOnly = true
+        end
+    end
+
+    lib.registerContext({
+        id = 'prisoners_public_roster',
+        title = 'Jail Roster',
+        options = jailRoster
+    })
+    lib.showContext('prisoners_public_roster')
+end
+
+local function createRosterZone()
+    local zoneInfo = config.RosterLocation
+    rosterZone = exports.ox_target:addSphereZone({
+        coords = zoneInfo.coords,
+        radius = zoneInfo.radius,
+        debug = zoneInfo.DebugPoly,
+        drawSprite = true,
+        options = {
+            {
+                label = 'View Prisoners Roster',
+                icon = 'fas fa-clipboard-list',
+                onSelect = openPublicRoster
+            }
+        }
+    })
+end
+
+local function removeRosterZone()
+    exports.ox_target:removeZone(rosterZone)
+end
+
+AddEventHandler('onResourceStart', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    createRosterZone()
+end)
+
+AddEventHandler('onResourceStop', function(resource)
+    if resource ~= GetCurrentResourceName() then return end
+    removeRosterZone()
+end)
+
+AddEventHandler('xt-prison:client:onLoad', function()
+    createRosterZone()
+end)
+
+AddEventHandler('xt-prison:client:onUnload', function()
+    removeRosterZone()
 end)

@@ -42,6 +42,12 @@ return {
         healLength = 5
     },
 
+    -- Roster Location --
+    RosterLocation = {
+        coords = vec3(1837.45, 2592.95, 45.85),
+        radius = 0.3,
+    },
+
     -- Set Prison Outfits --
     EnablePrisonOutfits = true,
     PrisonOufits = {
