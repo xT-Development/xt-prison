@@ -1,6 +1,5 @@
 return {
     DebugPoly = false,
-    XTPrisonJobs = false,       -- Enable if using xt-prisonjobs (THIS DOES NOT WORK AT THE MOMENT, PRISONJOBS NEEDS UPDATED TO PRISON V2)
     Freedom = vec4(1842.58, 2573.43, 45.89, 357.77), -- Freedom spawn coords
     RemoveJob = true,          -- Remove player jobs when send to jail
 
