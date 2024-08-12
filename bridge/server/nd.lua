@@ -10,7 +10,7 @@ end
 
 function getCharID(src)
     local player = getPlayer(src)
-    return player and player.identifier or nil
+    return player and player.id or nil
 end
 
 function getCharName(src)
