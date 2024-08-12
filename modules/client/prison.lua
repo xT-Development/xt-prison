@@ -184,6 +184,10 @@ function prisonModules.enterPrison(setTime)
             prisonModules.timeReductionLoop()
         end
 
+        if resources.xt_prisonjobs then
+            exports['xt-prisonjobs']:InitPrisonJob()
+        end
+
         return true
     end
 
@@ -214,6 +218,10 @@ function prisonModules.exitPrison(isUnjailed)
             while not IsScreenFadedIn() do Wait(25) end
 
             local returnItems = lib.callback.await('xt-prison:server:returnItems', false)
+
+            if resources.xt_prisonjobs then
+                exports['xt-prisonjobs']:CleanupPrisonJob()
+            end
 
             return true
         end
