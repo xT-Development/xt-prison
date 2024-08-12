@@ -18,7 +18,7 @@
   - View a list of people currently in prison
   - Control their jail time
   - Unjail them
-- Configurable to work with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) (Currently a WIP, only works w/ QB/QBX)
+- Compatabile with [xt-prisonjobs](https://xtdev.tebex.io/package/5226873) prison addons. Adds jobs, crafting, trading, and more.
 
 # Prison Break Features:
 - Global statebags for prison break alarms and all prison gate terminals
