@@ -20,7 +20,7 @@ end
 
 function charHasJob(src, job)
     local player = getPlayer(src)
-    return player and player.groups[group] or false
+    return player and player.groups[job] or false
 end
 
 function setCharJob(src, job)

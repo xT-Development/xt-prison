@@ -1,10 +1,9 @@
-if GetResourceState('qb-core') ~= 'started' or GetResourceState('qbx_core') == 'started' then return end
+if GetResourceState('qbx_core') ~= 'started' then return end
 
-local QBCore = exports['qb-core']:GetCoreObject()
 local config = require 'configs.server'
 
 function getPlayer(src)
-    return QBCore.Functions.GetPlayer(src)
+    return exports.qbx_core:GetPlayer(src)
 end
 
 function getCharID(src)
@@ -19,8 +18,7 @@ function getCharName(src)
 end
 
 function charHasJob(src, job)
-    local player = getPlayer(src)
-    return player and (player.PlayerData.job.name == job) or false
+    return exports.qbx_core:HasGroup(src, job)
 end
 
 function setCharJob(src, job)

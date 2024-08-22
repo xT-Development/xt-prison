@@ -20,7 +20,9 @@ server_scripts {
 }
 
 files {
-    'configs/*.lua',
-    'modules/**/*.lua',
-    'bridge/compat/*.lua'
+    'configs/client.lua',
+    'configs/prisonbreak.lua',
+    'modules/client/*.lua',
+    'bridge/compat/client.lua',
+    'bridge/compat/resources.lua'
 }

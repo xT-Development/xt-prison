@@ -101,7 +101,7 @@ function prisonModules.createPrisonZone()
             local alarm = lib.callback.await('xt-prison:server:setPrisonAlarms', false, true)
             if alarm then
                 lib.notify({ title = 'You escaped prison!', type = ' error' })
-                local breakout = lib.callback.await('xt-prison:server:triggerBreakout', false)
+                lib.callback.await('xt-prison:server:triggerBreakout', false)
             end
         end
     end
@@ -113,7 +113,7 @@ end
 
 -- Removes All Prison Zones, Blips, etc --
 function prisonModules.prisonCleanup()
-    local saveJailTime = lib.callback.await('xt-prison:server:saveJailTime', false)
+    lib.callback.await('xt-prison:server:saveJailTime', false)
     PrisonZone:remove()
     prisonModules.removeCheckoutLocation()
     prisonBreakModules.removeBlip()
@@ -143,7 +143,7 @@ function prisonModules.enterPrison(setTime)
 
     local setJailTime = prisonModules.setJailTime(setTime)
     if setJailTime then
-        local removeItems = lib.callback.await('xt-prison:server:removeItems', false)
+        lib.callback.await('xt-prison:server:removeItems', false)
         local isLifer = lib.callback.await('xt-prison:server:liferCheck', false)
 
         DoScreenFadeOut(2000)
@@ -170,7 +170,7 @@ function prisonModules.enterPrison(setTime)
 
         if config.EnterPrisonAlert.enable and not isLifer then
             local alertInfo = config.EnterPrisonAlert
-            local alert = lib.alertDialog({
+            lib.alertDialog({
                 header = alertInfo.header,
                 content = ('**Prison Sentence:** %s  \n%s'):format(setTime, alertInfo.content),
                 centered = true,
@@ -217,7 +217,7 @@ function prisonModules.exitPrison(isUnjailed)
             DoScreenFadeIn(2000)
             while not IsScreenFadedIn() do Wait(25) end
 
-            local returnItems = lib.callback.await('xt-prison:server:returnItems', false)
+            lib.callback.await('xt-prison:server:returnItems', false)
 
             if resources.xt_prisonjobs then
                 exports['xt-prisonjobs']:CleanupPrisonJob()
