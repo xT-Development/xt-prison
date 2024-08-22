@@ -11,7 +11,8 @@ local db = {
 MySQL.query([=[
     CREATE TABLE IF NOT EXISTS `xt_prison` (
         `identifier` VARCHAR(100) NOT NULL,
-        `jailtime` INT(11) NOT NULL DEFAULT '0'
+        `jailtime` INT(11) NOT NULL DEFAULT '0',
+        PRIMARY KEY (`identifier`) USING BTREE
     );
 ]=])
 
