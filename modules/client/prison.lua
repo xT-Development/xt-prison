@@ -101,7 +101,7 @@ function prisonModules.createPrisonZone()
             local alarm = lib.callback.await('xt-prison:server:setPrisonAlarms', false, true)
             if alarm then
                 lib.notify({ title = 'You escaped prison!', type = ' error' })
-                local breakout = lib.callback.await('xt-prison:server:triggerBreakout', false)
+                lib.callback.await('xt-prison:server:triggerBreakout', false)
             end
         end
     end
