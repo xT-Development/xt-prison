@@ -1,5 +1,6 @@
 local config    = require 'configs.client'
 local utils     = require 'modules.client.utils'
+local resources = require 'bridge.compat.resources'
 
 local prisonDoc
 local prisonDocBlip
@@ -71,7 +72,7 @@ local function removePrisonDoctor()
         return
     end
 
-     if resources.qb_target then
+    if resources.qb_target then
         exports['qb-target']:RemoveTargetEntity(prisonDoc)
     else
         exports.ox_target:removeLocalEntity(prisonDoc, 'Receive Check-Up')
