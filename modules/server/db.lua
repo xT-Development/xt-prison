@@ -8,21 +8,22 @@ local db = {
     identifier = qb and 'citizenid' or esx and 'identifier' or nd and 'charid' or ox and 'charid',
 }
 
-MySQL.query.await([=[
+MySQL.query([=[
     CREATE TABLE IF NOT EXISTS `xt_prison` (
         `identifier` VARCHAR(100) NOT NULL,
         `jailtime` INT(11) NOT NULL DEFAULT '0'
     );
 ]=])
 
-local convertNeeded = MySQL.query.await('SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ? AND COLUMN_NAME IN (jailtime);', { db.table })
-if convertNeeded then
-    local rows = MySQL.query.await('SELECT ?, `jailtime` FROM `?;', { db.identifer, db.table })
-    for _, row in ipairs(rows) do
-        MySQL.query.await('INSERT INTO xt_prison (identifier, jailtime) VALUES (?, ?)', { row.jailtime, row[db.identifier] })
+MySQL.query(("SELECT COUNT(COLUMN_NAME) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '%s' AND COLUMN_NAME = 'jailtime'"):format(db.table), function(convertNeeded)
+    if convertNeeded[1].count ~= 0 then
+        local rows = MySQL.query.await(('SELECT %s, jailtime FROM %s'):format(db.identifier, db.table))
+        for _, row in ipairs(rows) do
+            MySQL.query.await('INSERT INTO xt_prison (identifier, jailtime) VALUES (?, ?)', { row[db.identifier], row.jailtime })
+        end
+        MySQL.query.await(('ALTER TABLE %s DROP COLUMN jailtime'):format(db.table))
     end
-    MySQL.query.await('ALTER TABLE ? DROP COLUMN `jailtime`;', { db.table })
-end
+end)
 
 return {
     UPDATE_JAILTIME = 'INSERT INTO xt_prison (identifier, jailtime) VALUES (?, ?) ON DUPLICATE KEY UPDATE jailtime = VALUES(jailtime)',
