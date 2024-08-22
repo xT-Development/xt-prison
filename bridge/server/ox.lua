@@ -6,7 +6,7 @@ local chunk = assert(load(import, ('@@ox_core/%s'):format(file)))
 chunk()
 
 function getPlayer(id)
-    return Ox.GetPlayer(id)
+    return Ox.GetPlayer(id) --luacheck: ignore
 end
 
 function getCharID(src)

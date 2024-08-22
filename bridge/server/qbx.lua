@@ -1,7 +1,6 @@
 if GetResourceState('qbx_core') ~= 'started' then return end
 
 local config = require 'configs.server'
-local utils =  require 'modules.server.utils'
 
 function getPlayer(src)
     return exports.qbx_core:GetPlayer(src)

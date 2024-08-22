@@ -2,7 +2,6 @@ if GetResourceState('qb-core') ~= 'started' or GetResourceState('qbx_core') == '
 
 local QBCore = exports['qb-core']:GetCoreObject()
 local config = require 'configs.server'
-local utils =  require 'modules.server.utils'
 
 function getPlayer(src)
     return QBCore.Functions.GetPlayer(src)
