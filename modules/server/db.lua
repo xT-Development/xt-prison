@@ -17,7 +17,7 @@ MySQL.query([=[
 ]=])
 
 MySQL.query(("SELECT COUNT(COLUMN_NAME) as count FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '%s' AND COLUMN_NAME = 'jailtime'"):format(db.table), function(convertNeeded)
-    if convertNeeded[1].count ~= 0 then
+    if convertNeeded[1].count ~= 0 and convertNeeded[1].count > 1 then
         local rows = MySQL.query.await(('SELECT %s, jailtime FROM %s'):format(db.identifier, db.table))
         for _, row in ipairs(rows) do
             MySQL.query.await('INSERT INTO xt_prison (identifier, jailtime) VALUES (?, ?)', { row[db.identifier], row.jailtime })
