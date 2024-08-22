@@ -1,4 +1,4 @@
-if GetResourceState('qb-core') ~= 'started' or GetResourceState('qbx_core') == 'started' then return end
+if GetResourceState('qbx_core') ~= 'started' then return end
 
 -- Load / Unload Events --
 RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
