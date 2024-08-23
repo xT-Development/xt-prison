@@ -45,10 +45,15 @@ function prisonModules.setTerminalHackedState(src, terminalID, setState)
 
     if globalState[('PrisonTerminal_%s'):format(terminalID)].isHacked == setState then return end
 
+    if globalState[('PrisonTerminal_%s'):format(terminalID)].lastHacker ~= src then
+        -- TODO: Add exploit ban here
+        return
+    end
+
     local isBusy = globalState[('PrisonTerminal_%s'):format(terminalID)].isBusy
     globalState[('PrisonTerminal_%s'):format(terminalID)] = {
         isHacked = setState,
-        isBusy = isBusy
+        isBusy = isBusy,
     }
 
     if setState then
@@ -70,7 +75,8 @@ function prisonModules.setTerminalBusyState(src, terminalID, setState)
     local isHacked = globalState[('PrisonTerminal_%s'):format(terminalID)].isHacked
     globalState[('PrisonTerminal_%s'):format(terminalID)] = {
         isHacked = isHacked,
-        isBusy = setState
+        isBusy = setState,
+        lastHacker = src
     }
 
     return (globalState[('PrisonTerminal_%s'):format(terminalID)].isBusy == setState)
@@ -82,7 +88,8 @@ function prisonModules.setTerminalCooldown(terminalID)
         local door = ox_doorlock:getDoorFromName(prisonBreakcfg.HackZones[terminalID].gate)
         globalState[('PrisonTerminal_%s'):format(terminalID)] = {
             isHacked = false,
-            isBusy = false
+            isBusy = false,
+            lastHacker = nil
         }
         TriggerEvent('ox_doorlock:setState', door.id, true)
     end)
