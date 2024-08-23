@@ -9,7 +9,7 @@ local function savePlayerJailTime(src, cid)
     cid = cid or getCharID(src)
     local state = Player(src).state
     local jailTime = state and state.jailTime or 0
-    local callback = MySQL.insert.await(db.UPDATE_JAILTIME, { jailTime, cid })
+    local callback = MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
     return callback
 end
 
