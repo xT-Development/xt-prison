@@ -2,8 +2,7 @@ local globalState       = GlobalState
 local prisonBreakcfg    = require 'configs.prisonbreak'
 local prisonModules     = require 'modules.server.prisonbreak'
 
--- Toggle Prison Alarms --
-lib.callback.register('xt-prison:server:setPrisonAlarms', function(source, setState)
+local function setPrisonAlarms(setState)
     if globalState.prisonAlarms == setState then return end
 
     globalState.prisonAlarms = setState
@@ -13,11 +12,23 @@ lib.callback.register('xt-prison:server:setPrisonAlarms', function(source, setSt
     end
 
     return (globalState.prisonAlarms == setState)
+end
+
+-- Toggle Prison Alarms --
+lib.callback.register('xt-prison:server:setPrisonAlarms', function(_, setState)
+    return setPrisonAlarms(setState)
+end)
+
+RegisterNetEvent('xt-prison:server:setPrisonAlarmsChance', function(success)
+    local alarmChance = success and prisonBreakcfg.AlarmChanceOnHack.success or prisonBreakcfg.AlarmChanceOnHack.fail
+    if math.random(100) <= alarmChance then return end
+    setPrisonAlarms(true)
 end)
 
 -- Prisonbreak Terminal States --
-lib.callback.register('xt-prison:server:setTerminalHackedState', function(source, terminalID, setState)
-    return prisonModules.setTerminalHackedState(source, terminalID, setState)
+RegisterNetEvent('xt-prison:server:setTerminalHackedState', function(terminalID, setState)
+    local src = source
+    prisonModules.setTerminalHackedState(src, terminalID, setState)
 end)
 
 lib.callback.register('xt-prison:server:setTerminalBusyState', function(source, terminalID, setState)
@@ -25,27 +36,29 @@ lib.callback.register('xt-prison:server:setTerminalBusyState', function(source, 
 end)
 
 -- Remove Hacking Item(s) --
-lib.callback.register('xt-prison:server:removePrisonbreakItems', function(source)
-    local callback = false
+RegisterNetEvent('xt-prison:server:removePrisonbreakItems', function(success)
+    local src = source
+
+    local removeItemsChance = success and prisonBreakcfg.RemoveItemsChanceOnHack.success or prisonBreakcfg.RemoveItemsChanceOnHack.fail
+    if math.random(100) <= removeItemsChance then return end
+
     local requiredItems = prisonBreakcfg.RequiredItems
     local removedCount = 0
 
     for requiredItem, requiredCount in pairs(requiredItems) do
-        if exports.ox_inventory:RemoveItem(source, requiredItem, (requiredCount or 1)) then
+        if exports.ox_inventory:RemoveItem(src, requiredItem, (requiredCount or 1)) then
             removedCount += 1
             if removedCount == #requiredItems then
-                callback = true
                 break
             end
         end
     end
-
-    return callback
 end)
 
 -- Breakout of Prison --
-lib.callback.register('xt-prison:server:triggerBreakout', function(source)
-    return prisonModules.prisonBreakout()
+RegisterNetEvent('xt-prison:server:triggerBreakout', function()
+    local src = source
+    prisonModules.prisonBreakout(src)
 end)
 
 AddEventHandler('onResourceStop', function(resource)

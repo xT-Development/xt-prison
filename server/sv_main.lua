@@ -26,8 +26,9 @@ lib.callback.register('xt-prison:server:initJailTime', function(source)
 end)
 
 -- Save Jail Time --
-lib.callback.register('xt-prison:server:saveJailTime', function(source)
-    return savePlayerJailTime(source)
+RegisterNetEvent('xt-prison:server:saveJailTime', function()
+    local src = source
+    savePlayerJailTime(src)
 end)
 
 -- Remove Player Job --
@@ -49,36 +50,36 @@ lib.callback.register('xt-prison:server:removeJob', function(source)
 end)
 
 -- Remove Items on Entry --
-lib.callback.register('xt-prison:server:removeItems', function(source)
-    if ox_inventory:ConfiscateInventory(source) then
-        lib.notify(source, {
+RegisterNetEvent('xt-prison:server:removeItems', function()
+    local src = source
+    if ox_inventory:ConfiscateInventory(src) then
+        lib.notify(src, {
             title = 'Your items were confiscated!',
             icon = 'fas fa-trash',
             type = 'error'
         })
-        return true
     end
-
-    return false
 end)
 
 -- Return Items on Exit --
-lib.callback.register('xt-prison:server:returnItems', function(source)
-    local CID = getCharID(source)
+RegisterNetEvent('xt-prison:server:returnItems', function()
+    local src = source
+    if Player(src).state.jailTime > 0 then
+        -- TODO: Add exploit ban
+        return
+    end
+    local CID = getCharID(src)
     local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
 
     if getInv and getInv[1] then
-        if ox_inventory:ReturnInventory(source) then
-            lib.notify(source, {
+        if ox_inventory:ReturnInventory(src) then
+            lib.notify(src, {
                 title = 'Your items were returned!',
                 icon = 'fas fa-hand-holding-heart',
                 type = 'success'
             })
-            return true
         end
     end
-
-    return false
 end)
 
 -- Set Jail Time --

@@ -7,8 +7,7 @@ local ox_doorlock       = exports.ox_doorlock
 local prisonModules = {}
 
 -- Breakout of Prison --
-function prisonModules.prisonBreakout()
-    local src = source
+function prisonModules.prisonBreakout(src)
     local playerState = Player(src)?.state
     if not playerState then return end
 
