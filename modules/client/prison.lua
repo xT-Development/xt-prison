@@ -101,7 +101,7 @@ function prisonModules.createPrisonZone()
             local alarm = lib.callback.await('xt-prison:server:setPrisonAlarms', false, true)
             if alarm then
                 lib.notify({ title = 'You escaped prison!', type = ' error' })
-                lib.callback.await('xt-prison:server:triggerBreakout', false)
+                TriggerServerEvent('xt-prison:server:triggerBreakout')
             end
         end
     end
@@ -113,7 +113,7 @@ end
 
 -- Removes All Prison Zones, Blips, etc --
 function prisonModules.prisonCleanup()
-    lib.callback.await('xt-prison:server:saveJailTime', false)
+    TriggerServerEvent('xt-prison:server:saveJailTime')
     PrisonZone:remove()
     prisonModules.removeCheckoutLocation()
     prisonBreakModules.removeBlip()
@@ -143,7 +143,7 @@ function prisonModules.enterPrison(setTime)
 
     local setJailTime = prisonModules.setJailTime(setTime)
     if setJailTime then
-        lib.callback.await('xt-prison:server:removeItems', false)
+        TriggerServerEvent('xt-prison:server:removeItems')
         local isLifer = lib.callback.await('xt-prison:server:liferCheck', false)
 
         DoScreenFadeOut(2000)
@@ -217,7 +217,7 @@ function prisonModules.exitPrison(isUnjailed)
             DoScreenFadeIn(2000)
             while not IsScreenFadedIn() do Wait(25) end
 
-            lib.callback.await('xt-prison:server:returnItems', false)
+            TriggerServerEvent('xt-prison:server:returnItems')
 
             if resources.xt_prisonjobs then
                 exports['xt-prisonjobs']:CleanupPrisonJob()

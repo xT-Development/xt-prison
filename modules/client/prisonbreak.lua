@@ -94,18 +94,8 @@ function prisonBreakModules.startGateHack(ID)
     local success = prisonBreakcfg.GateHackMinigame(ID)
 
     lib.callback.await('xt-prison:server:setTerminalBusyState', false, ID, false)
-
-    local randChance1 = math.random(100)
-    local alarmChance = success and prisonBreakcfg.AlarmChanceOnHack.success or prisonBreakcfg.AlarmChanceOnHack.fail
-    if randChance1 <= alarmChance then
-        lib.callback.await('xt-prison:server:setPrisonAlarms', false, true)
-    end
-
-    local randChance2 = math.random(100)
-    local removeItemsChance = success and prisonBreakcfg.RemoveItemsChanceOnHack.success or prisonBreakcfg.RemoveItemsChanceOnHack.fail
-    if randChance2 <= removeItemsChance then
-        lib.callback.await('xt-prison:server:removePrisonbreakItems', false)
-    end
+    TriggerServerEvent('xt-prison:server:setPrisonAlarmsChance', success)
+    TriggerServerEvent('xt-prison:server:removePrisonbreakItems', success)
 
     if success then
         if lib.progressCircle({
@@ -122,7 +112,7 @@ function prisonBreakModules.startGateHack(ID)
             },
         }) then
             lib.notify({ title = 'You completed the hack!', type = 'success' })
-            lib.callback.await('xt-prison:server:setTerminalHackedState', false, ID, true)
+            TriggerServerEvent('xt-prison:server:setTerminalHackedState', ID, true)
         end
     else
         lib.notify({ title = 'You failed the hack!', type = 'error' })
