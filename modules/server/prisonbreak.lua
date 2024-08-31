@@ -24,7 +24,7 @@ function prisonModules.prisonBreakout(src)
         end
     end
 
-    return (jailTime == 0)
+    return (playerState.jailTime == 0)
 end
 
 -- Countdown for Alarms to Turn Off --

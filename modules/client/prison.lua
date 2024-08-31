@@ -102,6 +102,7 @@ function prisonModules.createPrisonZone()
             if alarm then
                 lib.notify({ title = 'You escaped prison!', type = ' error' })
                 TriggerServerEvent('xt-prison:server:triggerBreakout')
+                config.Dispatch(prisonBreakcfg.Center)
             end
         end
     end
@@ -161,7 +162,6 @@ function prisonModules.enterPrison(setTime)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
 
-        inJail = true
         config.Emote(RandomSpawn.emote)
         prisonModules.createCheckoutLocation()
 
@@ -187,6 +187,8 @@ function prisonModules.enterPrison(setTime)
         if resources.xt_prisonjobs then
             exports['xt-prisonjobs']:InitPrisonJob()
         end
+
+        inJail = true
 
         return true
     end

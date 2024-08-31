@@ -140,8 +140,6 @@ end
 -- Prison Alarm Toggle --
 function prisonBreakModules.setPrisonAlarm(setState)
     if setState then
-        config.Dispatch(prisonBreakcfg.Center)
-
         prisonBreakModules.initAlarm(true)
 
         PrisonBreakBlip = utils.createBlip('PRISON BREAK', prisonBreakcfg.Center, 161, 3.0, 3, true)
