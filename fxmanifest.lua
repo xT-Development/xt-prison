@@ -3,8 +3,10 @@ game 'gta5'
 use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 
-description 'Prison for QB, QBX, OX, ND, & ESX | xT Development'
 author 'xT Development'
+description 'Prison for QB, QBX, OX, ND, & ESX'
+repository 'https://github.com/xT-Development/xt-prison'
+version '1.0.0'
 
 shared_scripts { '@ox_lib/init.lua' }
 
