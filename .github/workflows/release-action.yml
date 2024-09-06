@@ -39,6 +39,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.LATEST_TAG }}
+          includeInvalidCommits: true
           writeToFile: false
 
       - name: Create Release
