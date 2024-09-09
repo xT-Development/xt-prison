@@ -5,12 +5,12 @@ local utils             = require 'modules.server.utils'
 local ox_inventory      = exports.ox_inventory
 local globalState       = GlobalState
 
-local function savePlayerJailTime(src, cid)
-    cid = cid or getCharID(src)
+local function savePlayerJailTime(src)
     local state = Player(src).state
     local jailTime = state and state.jailTime or 0
-    local callback = MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
-    return callback
+    local cid = getCharID(src) or state and state.xtprison_identifier
+    if not cid then return lib.print.debug('player core identifier not found, not saving jailtime') end
+    MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
 end
 
 local function loadPlayerJailTime(src)
@@ -144,6 +144,5 @@ end)
 
 AddEventHandler('playerDropped', function(reason)
     local src = source
-    local cid = getCharID(src)
-    savePlayerJailTime(src, cid)
+    savePlayerJailTime(src)
 end)
