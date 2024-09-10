@@ -34,6 +34,7 @@ function setJailTime(src, time)
     if not playerState or not player then return end
 
     playerState.jailTime = time
+    playerState.xtprison_identifier = getCharID(src)
     player.Functions.SetMetaData('injail', time)
     Wait(100)
 

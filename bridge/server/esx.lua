@@ -32,6 +32,7 @@ function setJailTime(src, time)
     if not playerState or not player then return end
 
     playerState.jailTime = time
+    playerState.xtprison_identifier = getCharID(src)
 
     return playerState and (playerState.jailTime == time) or false
 end exports('SetJailTime', setJailTime)
