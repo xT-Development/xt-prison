@@ -43,7 +43,7 @@ function prisonModules.createCheckoutLocation()
                     type = "client",
                     event = "checkTime",
                     icon = "fas fa-hourglass-start",
-                    label = "Check Time",
+                    label = locale('input.check_time'),
                     action = function()
                         local timeLeft = lib.callback.await('xt-prison:server:checkJailTime', false)
                         if timeLeft <= 0 then
@@ -63,7 +63,7 @@ function prisonModules.createCheckoutLocation()
             drawsprite = true,
             options = {
                 {
-                    label = 'Check Time',
+                    label = locale('input.check_time'),
                     icon = 'fas fa-hourglass-start',
                     onSelect = function()
                         local timeLeft = lib.callback.await('xt-prison:server:checkJailTime', false)
@@ -100,7 +100,7 @@ function prisonModules.createPrisonZone()
             inJail = false
             local alarm = lib.callback.await('xt-prison:server:setPrisonAlarms', false, true)
             if alarm then
-                lib.notify({ title = 'You escaped prison!', type = ' error' })
+                lib.notify({ title = locale('notify.escaped'), type = ' error' })
                 TriggerServerEvent('xt-prison:server:triggerBreakout')
                 config.Dispatch(prisonBreakcfg.Center)
             end
@@ -172,12 +172,12 @@ function prisonModules.enterPrison(setTime)
             local alertInfo = config.EnterPrisonAlert
             lib.alertDialog({
                 header = alertInfo.header,
-                content = ('**Prison Sentence:** %s  \n%s'):format(setTime, alertInfo.content),
+                content = (locale('input.prison_sentence')):format(setTime, alertInfo.content),
                 centered = true,
                 labels = { confirm = 'Close' }
             })
         elseif config.EnterPrisonAlert.enable and isLifer then
-            lib.notify({ title = 'You\'re a lifer!', type = 'error' })
+            lib.notify({ title = locale('notify.lifer'), type = 'error' })
         end
 
         if not isLifer then
@@ -199,7 +199,7 @@ end
 -- Exiting Prison --
 function prisonModules.exitPrison(isUnjailed)
     if playerState.jailTime > 0 and not isUnjailed then
-        lib.notify({ title = ('You still have %s months left!'):format(playerState.jailTime), type = 'error' })
+        lib.notify({ title = (locale('notify.time_left')):format(playerState.jailTime), type = 'error' })
         return false
 	elseif playerState.jailTime <= 0 or isUnjailed then
         local setJailTime = prisonModules.setJailTime(0)
@@ -241,7 +241,7 @@ function prisonModules.timeReductionLoop()
                 prisonModules.setJailTime(newTime)
             elseif playerState.jailTime <= 0 and inJail then
                 lib.notify({
-                    title = 'Your time is up! Go checkout!',
+                    title = locale('notify.checkout'),
                     icon = 'fas fa-unlock',
                     type = 'success'
                 })

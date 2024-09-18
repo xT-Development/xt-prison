@@ -5,7 +5,7 @@ lib.callback.register('xt-prison:server:getJailRoster', function(source)
     local isCop = utils.isCop(source)
     if not isCop then
         lib.notify(source, {
-            title = 'You don\'t have access to this command!'
+            title = locale('notify.no_access')
         })
         return false
     end
@@ -23,8 +23,8 @@ lib.callback.register('xt-prison:server:unjailPlayerByRoster', function(source, 
         setJailTime(targetSource, 0)
 
         lib.notify(targetSource, {
-            title = 'Freedom!',
-            description = 'Your jail time was set to zero, you\'re being released!'
+            title = locale('notify.freedom'),
+            description = locale('notify.unjailed_by_roster')
         })
         Wait(3000)
         local released = lib.callback.await('xt-prison:client:exitJail', targetSource, true)
@@ -44,8 +44,8 @@ lib.callback.register('xt-prison:server:changePlayerJailTimeByRoster', function(
         setJailTime(targetSource, newTime)
 
         lib.notify(targetSource, {
-            title = 'New Jail Time',
-            description = ('Your jail time was set to %s months!'):format(newTime)
+            title = locale('notify.new_time_by_roster'),
+            description = (locale('notify.new_time_by_roster_description')):format(newTime)
         })
     end
 

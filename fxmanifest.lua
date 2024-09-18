@@ -22,9 +22,12 @@ server_scripts {
 }
 
 files {
+    'locales/*.json',
     'configs/client.lua',
     'configs/prisonbreak.lua',
     'modules/client/*.lua',
     'bridge/compat/client.lua',
     'bridge/compat/resources.lua'
 }
+
+ox_libs { 'locale' }

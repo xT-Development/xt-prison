@@ -1,0 +1,45 @@
+{
+    "notify":{
+        "freedom":"Freedom!",
+        "new_time_by_roster":"New Jail Time",
+        "new_time_by_roster_description":"Your jail time was set to %s months!",
+        "unjailed_by_roster":"Your jail time was set to zero, you're being released!",
+        "no_access":"You don't have access to this command!",
+        "updated_players_time":"Updated %s's Jail Time to %s Months",
+        "player_sent":"Sent %s to Jail for %s Months",
+        "time_updated_description":"Your jail time was set to %s months",
+        "time_updated":"Jail Time Updated",
+        "invalid_player":"Invalid Player!",
+        "lost_job":"You lost your job!",
+        "confiscated":"Your items were confiscated!",
+        "returned_items":"Your items were returned!",
+        "player_released":"%s was Released!",
+        "lifer":"You're in jail for life!",
+        "jail_time":"Jail Time",
+        "time_left":"You have %s months left.",
+        "no_time_left":"You don't have any jail time left!",
+        "time_remaining":"Time Remaining: %s Months",
+        "completed_hack":"You completed the hack!",
+        "failed_hack":"You failed the hack!",
+        "escaped":"You escaped prison!",
+        "checkout":"Your time is up! Go checkout!"
+    },
+
+    "commands":{
+        "jail":"Jail Player",
+        "unjail":"Unjail a Player",
+        "playerid":"Player ID",
+        "check_time":"Check your jail time"
+    },
+
+    "input":{
+        "jail_player":"Jail Player",
+        "playerid":"Player Server ID",
+        "jailtime":"Jail Time",
+        "months":"Months ( Minutes )",
+        "hack_gate":"Hack Prison Gate",
+        "hacking":"Hacking Terminal...",
+        "check_time":"Check Time",
+        "prison_sentence":"**Prison Sentence:** %s  \n%s"
+    }
+}

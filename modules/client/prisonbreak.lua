@@ -29,7 +29,7 @@ function prisonBreakModules.createHackZones()
                         type = "client",
                         event = "startGateHack",
                         icon = "fas fa-laptop-code",
-                        label = "Hack Prison Gate",
+                        label = locale('input.hack_gate'),
                         item = prisonBreakcfg.RequiredItems,
                         action = function()
                             prisonBreakModules.startGateHack(x)
@@ -50,7 +50,7 @@ function prisonBreakModules.createHackZones()
                 drawsprite = true,
                 options = {
                     {
-                        label = 'Hack Prison Gate',
+                        label = locale('input.hack_gate'),
                         icon = 'fas fa-laptop-code',
                         items = prisonBreakcfg.RequiredItems,
                         onSelect = function()
@@ -99,7 +99,7 @@ function prisonBreakModules.startGateHack(ID)
 
     if success then
         if lib.progressCircle({
-            label = 'Hacking Terminal...',
+            label = locale('input.hacking'),
             duration = (prisonBreakcfg.HackLength * 1000),
             position = 'bottom',
             useWhileDead = false,
@@ -111,11 +111,11 @@ function prisonBreakModules.startGateHack(ID)
                 sprint = true
             },
         }) then
-            lib.notify({ title = 'You completed the hack!', type = 'success' })
+            lib.notify({ title = locale('notify.completed_hack'), type = 'success' })
             TriggerServerEvent('xt-prison:server:setTerminalHackedState', ID, true)
         end
     else
-        lib.notify({ title = 'You failed the hack!', type = 'error' })
+        lib.notify({ title = locale('notify.failed_hack'), type = 'error' })
     end
 
     ClearPedTasks(cache.ped)

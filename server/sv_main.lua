@@ -36,7 +36,7 @@ lib.callback.register('xt-prison:server:removeJob', function(source)
     if charHasJob(source, config.UnemployedJobName) then
         if setCharJob(source, config.UnemployedJobName) then
             lib.notify(source, {
-                title = 'You lost your job!',
+                title = locale('notify.lost_job'),
                 icon = 'fas fa-ban',
                 type = 'error'
             })
@@ -54,7 +54,7 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
     local src = source
     if ox_inventory:ConfiscateInventory(src) then
         lib.notify(src, {
-            title = 'Your items were confiscated!',
+            title = locale('notify.confiscated'),
             icon = 'fas fa-trash',
             type = 'error'
         })
@@ -74,7 +74,7 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
     if getInv and getInv[1] then
         if ox_inventory:ReturnInventory(src) then
             lib.notify(src, {
-                title = 'Your items were returned!',
+                title = locale('notify.returned_items'),
                 icon = 'fas fa-hand-holding-heart',
                 type = 'success'
             })

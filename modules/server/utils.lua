@@ -68,7 +68,7 @@ function utils.checkJailTime(source)
 
     if isLifer then
         lib.notify(source, {
-            title = 'You\'re in jail for life!',
+            title = locale('notify.lifer'),
             icon = 'fas fa-lock',
             type = 'info'
         })
@@ -77,15 +77,15 @@ function utils.checkJailTime(source)
         jailTime = playerState.jailTime or 0
         if jailTime > 0 then
             lib.notify(source, {
-                title = 'Jail Time',
-                description = ('You have %s months left.'):format(jailTime),
+                title = locale('notify.jail_time'),
+                description = (locale('notify.time_left')):format(jailTime),
                 icon = 'fas fa-hourglass',
                 type = 'info'
             })
         elseif jailTime <= 0 then
             lib.notify(source, {
-                title = 'Jail Time',
-                description = 'You don\'t have any jail time left!',
+                title = locale('notify.jail_time'),
+                description = locale('notify.no_time_left'),
                 icon = 'fas fa-hourglass-end',
                 type = 'info'
             })
@@ -105,7 +105,7 @@ function utils.generateJailRoster()
             local charName = getCharName(tonumber(src))
             roster[#roster + 1] = {
                 title = charName,
-                description = ('Time Remaining: %s Months'):format(state.jailTime),
+                description = (locale('notify.time_remaining')):format(state.jailTime),
                 icon = 'fas fa-user-lock',
                 private = {
                     source = tonumber(src),
