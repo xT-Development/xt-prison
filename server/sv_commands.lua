@@ -3,7 +3,7 @@ local utils     = require 'modules.server.utils'
 
 -- Check Jail Time --
 lib.addCommand('jailtime', {
-    help = 'Check your jail time',
+    help = locale('commands.check_time'),
     params = {},
     restricted = false
 }, function(source, args, raw)
@@ -11,10 +11,10 @@ lib.addCommand('jailtime', {
 end)
 
 
--- Jail Player Command --
+-- Jail/Unjail Player Commands --
 if config.EnableJailCommand then
     lib.addCommand('jail', {
-        help = 'Jail Player',
+        help = locale('commands.jail'),
         params = {},
         restricted = false
     }, function(source, args, _)
@@ -28,18 +28,18 @@ if config.EnableJailCommand then
             local targetSource = tonumber(jailInput[1])
             local setTime = tonumber(jailInput[2])
 
-            local dist = utils.playerDistanceCheck(source, targetSource)
-            if not dist then return end
-
             local targetPlayer = getPlayer(targetSource)
             if not targetPlayer then
                 return lib.notify(source, {
-                    title = 'Invalid Player!',
+                    title = locale('notify.invalid_player'),
                     type = 'error'
                 })
             end
 
-            local notifyTitle = ('Sent %s to Jail for %s Months'):format(getCharName(targetSource), setTime)
+            local dist = utils.playerDistanceCheck(source, targetSource)
+            if not dist then return end
+
+            local notifyTitle = (locale('notify.player_sent')):format(getCharName(targetSource), setTime)
             local state = Player(targetSource).state
             if state?.jailTime and state?.jailTime > 0 then
                 if setTime < 0 then
@@ -49,13 +49,13 @@ if config.EnableJailCommand then
                 setJailTime(targetSource, setTime)
 
                 lib.notify(targetSource, {
-                    title = 'Jail Time Updated',
-                    description = ('Your jail time was set to %s months'):format(setTime),
+                    title = locale('notify.time_updated'),
+                    description = (locale('notify.time_updated_description')):format(setTime),
                     icon = 'fas fa-lock',
                     type = 'success',
                     duration = 5000
                 })
-                notifyTitle = ('Updated %s\'s Jail Time to %s Months'):format(getCharName(targetSource), setTime)
+                notifyTitle = (locale('notify.updated_players_times')):format(getCharName(targetSource), setTime)
             else
                 lib.callback.await('xt-prison:client:enterJail', targetSource, setTime)
             end
@@ -68,8 +68,37 @@ if config.EnableJailCommand then
             })
         else
             lib.notify(source, {
-                title = 'You don\'t have access to this command!',
+                title = locale('notify.no_access'),
                 type = 'info'
+            })
+        end
+    end)
+
+    lib.addCommand('unjail', {
+        help = locale('commands.unjail'),
+        params = {{
+            name = 'id',
+            type = 'playerId',
+            help = locale('commands.playerid')
+        }}
+    }, function(source, args)
+        if not utils.isCop(source) then return end
+
+        local targetPlayer = getPlayer(args.id)
+        if not targetPlayer then
+            return lib.notify(source, {
+                title = locale('notify.invalid_player'),
+                type = 'error'
+            })
+        end
+
+        local released = lib.callback.await('xt-prison:client:exitJail', args.id, true)
+        if released then
+            lib.notify(source, {
+                title = (locale('notify.player_released')):format(getCharName(args.id)),
+                icon = 'fas fa-lock',
+                type = 'success',
+                duration = 5000
             })
         end
     end)
