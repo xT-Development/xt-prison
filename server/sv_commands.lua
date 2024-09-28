@@ -92,6 +92,11 @@ if config.EnableJailCommand then
             })
         end
 
+        local state = Player(args.id).state
+        if state and state.jailTime <= 0 then
+            return
+        end
+
         local released = lib.callback.await('xt-prison:client:exitJail', args.id, true)
         if released then
             lib.notify(source, {
