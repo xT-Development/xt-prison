@@ -11,6 +11,12 @@ local function savePlayerJailTime(src)
     local cid = getCharID(src) or state and state.xtprison_identifier
     if not cid then return lib.print.debug('player core identifier not found, not saving jailtime') end
     MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
+
+    local getInv = MySQL.query.await(db.GET_INVENTORY, { cid, cid })
+    if getInv and getInv[1] then
+        ox_inventory:ReturnInventory(src)
+    end
+
 end
 
 local function loadPlayerJailTime(src)
