@@ -4,6 +4,7 @@ local prisonBreakcfg    = require 'configs.prisonbreak'
 local utils             = require 'modules.server.utils'
 local ox_inventory      = exports.ox_inventory
 local globalState       = GlobalState
+local confiscated       = {}
 
 local function savePlayerJailTime(src)
     local state = Player(src).state
@@ -12,11 +13,13 @@ local function savePlayerJailTime(src)
     if not cid then return lib.print.debug('player core identifier not found, not saving jailtime') end
     MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
 
-    local getInv = MySQL.query.await(db.GET_INVENTORY, { cid, cid })
-    if getInv and getInv[1] then
-        ox_inventory:ReturnInventory(src)
+    if confiscated[src] then
+        local getInv = MySQL.query.await(db.GET_INVENTORY, { cid, cid })
+        if getInv and getInv[1] then
+            ox_inventory:ReturnInventory(src)
+        end
+        confiscated[src] = nil
     end
-
 end
 
 local function loadPlayerJailTime(src)
@@ -58,7 +61,9 @@ end)
 -- Remove Items on Entry --
 RegisterNetEvent('xt-prison:server:removeItems', function()
     local src = source
-    if ox_inventory:ConfiscateInventory(src) then
+    if not confiscated[src] and ox_inventory:ConfiscateInventory(src) then
+        confiscated[src] = true
+
         lib.notify(src, {
             title = locale('notify.confiscated'),
             icon = 'fas fa-trash',
@@ -79,6 +84,8 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
 
     if getInv and getInv[1] then
         if ox_inventory:ReturnInventory(src) then
+            confiscated[src] = nil
+
             lib.notify(src, {
                 title = locale('notify.returned_items'),
                 icon = 'fas fa-hand-holding-heart',
