@@ -20,7 +20,10 @@ function prisonModules.setJailTime(jailTime)
     end
 
     playerState:set('jailTime', jailTime, true)
-    Wait(100)
+
+    while playerState.jailTime ~= jailTime do
+        Wait(1)
+    end
 
     return (playerState.jailTime == jailTime)
 end
@@ -155,6 +158,7 @@ function prisonModules.enterPrison(setTime)
             if prisonModules.setPlayerCoords(RandomSpawn.coords) then
                 if config.EnablePrisonOutfits then
                     prisonModules.applyPrisonUniform()
+                    inJail = true
                 end
                 return true
             end
@@ -187,8 +191,6 @@ function prisonModules.enterPrison(setTime)
         if resources.xt_prisonjobs then
             exports['xt-prisonjobs']:InitPrisonJob()
         end
-
-        inJail = true
 
         return true
     end
