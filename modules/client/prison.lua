@@ -237,11 +237,11 @@ end
 -- Reduce Jail Time Loop --
 function prisonModules.timeReductionLoop()
     CreateThread(function()
-        while true do
-            if playerState.jailTime > 0 and inJail then
+        while inJail do
+            if playerState.jailTime > 0 then
                 local newTime = (playerState.jailTime - 1)
                 prisonModules.setJailTime(newTime)
-            elseif playerState.jailTime <= 0 and inJail then
+            elseif playerState.jailTime <= 0 then
                 lib.notify({
                     title = locale('notify.checkout'),
                     icon = 'fas fa-unlock',
