@@ -83,6 +83,10 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
     local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
 
     if getInv and getInv[1] then
+        local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
+
+        ox_inventory:ClearInventory(src) -- Clear Prison Inventory
+
         if ox_inventory:ReturnInventory(src) then
             confiscated[src] = nil
 
@@ -91,6 +95,12 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
                 icon = 'fas fa-hand-holding-heart',
                 type = 'success'
             })
+        end
+
+        for slot, info in pairs(prisonInventory) do -- Return some prison items
+            if config.AllowedToKeepItems[info.name] then
+                ox_inventory:AddItem(src, info.name, info.count, info.metadata)
+            end
         end
     end
 end)

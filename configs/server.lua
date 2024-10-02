@@ -14,6 +14,10 @@ return {
         }
     },
 
+    AllowedToKeepItems = {                      --  Items found/received in prison that can be kept when released
+        ['money'] = true
+    },
+
     PoliceJobs = {                              -- Police jobs
         'police',
         'lspd',
