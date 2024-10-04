@@ -173,13 +173,15 @@ function prisonModules.enterPrison(setTime)
         while not IsScreenFadedIn() do Wait(25) end
 
         if config.EnterPrisonAlert.enable and not isLifer then
-            local alertInfo = config.EnterPrisonAlert
-            lib.alertDialog({
-                header = alertInfo.header,
-                content = (locale('input.prison_sentence')):format(setTime, alertInfo.content),
-                centered = true,
-                labels = { confirm = 'Close' }
-            })
+            CreateThread(function()
+                local alertInfo = config.EnterPrisonAlert
+                lib.alertDialog({
+                    header = alertInfo.header,
+                    content = (locale('input.prison_sentence')):format(setTime, alertInfo.content),
+                    centered = true,
+                    labels = { confirm = 'Close' }
+                })
+            end)
         elseif config.EnterPrisonAlert.enable and isLifer then
             lib.notify({ title = locale('notify.lifer'), type = 'error' })
         end
