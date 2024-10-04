@@ -158,8 +158,8 @@ function prisonModules.enterPrison(setTime)
             if prisonModules.setPlayerCoords(RandomSpawn.coords) then
                 if config.EnablePrisonOutfits then
                     prisonModules.applyPrisonUniform()
-                    inJail = true
                 end
+                inJail = true
                 return true
             end
         end, 'your pc is dogshit', 10000)
