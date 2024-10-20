@@ -1,3 +1,5 @@
+lib.versionCheck('xT-Development/xt-prison')
+
 local db                = require 'modules.server.db'
 local config            = require 'configs.server'
 local prisonBreakcfg    = require 'configs.prisonbreak'
