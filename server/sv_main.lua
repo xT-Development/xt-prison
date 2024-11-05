@@ -1,5 +1,3 @@
-lib.versionCheck('xT-Development/xt-prison')
-
 local db                = require 'modules.server.db'
 local config            = require 'configs.server'
 local prisonBreakcfg    = require 'configs.prisonbreak'
@@ -16,17 +14,14 @@ local function savePlayerJailTime(src)
     MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
 
     if confiscated[src] then
-        local getInv = MySQL.query.await(db.GET_INVENTORY, { cid, cid })
-        if getInv and getInv[1] then
-            ox_inventory:ReturnInventory(src)
-        end
+        ox_inventory:ReturnInventory(src)
         confiscated[src] = nil
     end
 end
 
 local function loadPlayerJailTime(src)
-    local CID = getCharID(src)
-    local getJailTime = MySQL.scalar.await(db.LOAD_JAILTIME, { CID })
+    local cid = getCharID(src)
+    local getJailTime = MySQL.scalar.await(db.LOAD_JAILTIME, { cid })
     local setTime = setJailTime(src, getJailTime or 0)
     return setTime and getJailTime or 0
 end
@@ -63,8 +58,20 @@ end)
 -- Remove Items on Entry --
 RegisterNetEvent('xt-prison:server:removeItems', function()
     local src = source
-    if not confiscated[src] and ox_inventory:ConfiscateInventory(src) then
-        confiscated[src] = true
+    if confiscated[src] then return end
+
+    local cid = getCharID(src)
+    local playerItems = ox_inventory:GetInventoryItems(src)
+    local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid })
+
+    confiscatedItems = json.decode(confiscatedItems) or {}
+
+    local confiscatedLength = utils.getTableLength(confiscatedItems)
+    local playerItemsLength = utils.getTableLength(playerItems)
+
+    if (playerItemsLength > 0) and (confiscatedLength == 0) then -- Checks if player has items and confiscated table is empty
+        MySQL.insert.await(db.CONFISCATE_ITEMS, { cid, json.encode(playerItems) })
+        ox_inventory:ClearInventory(src)
 
         lib.notify(src, {
             title = locale('notify.confiscated'),
@@ -72,6 +79,8 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
             type = 'error'
         })
     end
+
+    confiscated[src] = true
 end)
 
 -- Return Items on Exit --
@@ -81,28 +90,38 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
         -- TODO: Add exploit ban
         return
     end
-    local CID = getCharID(src)
-    local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
 
-    if getInv and getInv[1] then
-        local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
+    if not confiscated[src] then return end
 
-        ox_inventory:ClearInventory(src) -- Clear Prison Inventory
+    local cid = getCharID(src)
+    local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
+    local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid }) -- Get Confiscated Items
+    confiscatedItems = json.decode(confiscatedItems) or {}
 
-        if ox_inventory:ReturnInventory(src) then
-            confiscated[src] = nil
+    ox_inventory:ClearInventory(src) -- Clear Prison Inventory
 
-            lib.notify(src, {
-                title = locale('notify.returned_items'),
-                icon = 'fas fa-hand-holding-heart',
-                type = 'success'
-            })
+    Wait(100)
+
+    local confiscatedLength = utils.getTableLength(confiscatedItems)
+    if confiscatedLength > 0 then -- Ensure table is not empty
+        for slot, info in pairs(confiscatedItems) do
+            ox_inventory:AddItem(src, info.name, info.count, info.metadata)
         end
 
-        for slot, info in pairs(prisonInventory) do -- Return some prison items
-            if config.AllowedToKeepItems[info.name] then
-                ox_inventory:AddItem(src, info.name, info.count, info.metadata)
-            end
+        MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { cid })
+    end
+
+    confiscated[src] = nil
+
+    lib.notify(src, {
+        title = locale('notify.returned_items'),
+        icon = 'fas fa-hand-holding-heart',
+        type = 'success'
+    })
+
+    for slot, info in pairs(prisonInventory) do -- Return some prison items
+        if config.AllowedToKeepItems[info.name] then
+            ox_inventory:AddItem(src, info.name, info.count, info.metadata)
         end
     end
 end)
