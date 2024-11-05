@@ -156,13 +156,22 @@ function prisonModules.enterPrison(setTime)
         local RandomSpawn = config.Spawns[math.random(1, #config.Spawns)]
         lib.waitFor(function()
             if prisonModules.setPlayerCoords(RandomSpawn.coords) then
-                if config.EnablePrisonOutfits then
-                    prisonModules.applyPrisonUniform()
+                FreezeEntityPosition(cache.ped, true)
+                while not HasCollisionLoadedAroundEntity(cache.ped) do
+                    Wait(0)
                 end
-                inJail = true
-                return true
+
+                if HasCollisionLoadedAroundEntity(cache.ped) then
+                    if config.EnablePrisonOutfits then
+                        prisonModules.applyPrisonUniform()
+                    end
+                    inJail = true
+                    return true
+                end
             end
         end, 'your pc is dogshit', 10000)
+
+        FreezeEntityPosition(cache.ped, false)
 
         TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
 
