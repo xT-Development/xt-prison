@@ -66,10 +66,7 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
 
     confiscatedItems = json.decode(confiscatedItems) or {}
 
-    local confiscatedLength = utils.getTableLength(confiscatedItems)
-    local playerItemsLength = utils.getTableLength(playerItems)
-
-    if (playerItemsLength > 0) and (confiscatedLength == 0) then -- Checks if player has items and confiscated table is empty
+    if next(playerItems) and not next(confiscatedItems) then -- Checks if player has items and confiscated table is empty
         MySQL.insert.await(db.CONFISCATE_ITEMS, { cid, json.encode(playerItems) })
         ox_inventory:ClearInventory(src)
 
@@ -102,8 +99,7 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
 
     Wait(100)
 
-    local confiscatedLength = utils.getTableLength(confiscatedItems)
-    if confiscatedLength > 0 then -- Ensure table is not empty
+    if next(confiscatedItems) then -- Ensure table is not empty
         for slot, info in pairs(confiscatedItems) do
             ox_inventory:AddItem(src, info.name, info.count, info.metadata)
         end
