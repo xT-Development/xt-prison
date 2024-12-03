@@ -141,11 +141,13 @@ return {
     Dispatch = function(coords)
         -- exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
-        exports["ND_MDT"]:createDispatch({
-            caller = "Boilingbroke Penitentiary",
-            location = "Sandy Shores",
-            callDescription = "Prison Break",
-            coords = vec3(1845.8302, 2585.9011, 45.6726)
-        })
+        
+       -- ND Core
+        -- exports["ND_MDT"]:createDispatch({
+        --             caller = "Boilingbroke Penitentiary",
+        --             location = "Sandy Shores",
+        --             callDescription = "Prison Break",
+        --             coords = vec3(1845.8302, 2585.9011, 45.6726)
+        --         })
     end,
 }
