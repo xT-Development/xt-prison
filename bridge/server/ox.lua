@@ -1,9 +1,6 @@
 if GetResourceState('ox_core') ~= 'started' then return end
 
-local file = ('imports/%s.lua'):format(IsDuplicityVersion() and 'server' or 'client')
-local import = LoadResourceFile('ox_core', file)
-local chunk = assert(load(import, ('@@ox_core/%s'):format(file)))
-chunk()
+local Ox = require '@ox_core.lib.init'
 
 function getPlayer(id)
     return Ox.GetPlayer(id) --luacheck: ignore
@@ -21,7 +18,8 @@ end
 
 function charHasJob(src, job)
     local player = getPlayer(src)
-    return player and player.hasGroup(job) or false
+    local group, rank = player.getGroup(job)
+    return (group ~= nil)
 end
 
 function setCharJob(src, job)
