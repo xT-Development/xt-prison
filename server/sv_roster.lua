@@ -2,14 +2,6 @@ local utils = require 'modules.server.utils'
 
 -- View Jail Roster --
 lib.callback.register('xt-prison:server:getJailRoster', function(source)
-    local isCop = utils.isCop(source)
-    if not isCop then
-        lib.notify(source, {
-            title = locale('notify.no_access')
-        })
-        return false
-    end
-
     return utils.generateJailRoster()
 end)
 
