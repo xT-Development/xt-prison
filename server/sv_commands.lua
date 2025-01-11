@@ -10,6 +10,25 @@ lib.addCommand('jailtime', {
     utils.checkJailTime(source)
 end)
 
+-- Jail Roster --
+lib.addCommand('prisoners', {
+    help = locale('commands.prisoners_roster'),
+    params = {},
+    restricted = false
+}, function(source, args, raw)
+    if not utils.isCop(source) then
+        lib.notify(source, {
+            title = locale('notify.no_access'),
+            type = 'info'
+        })
+        return
+    end
+
+    local jailRoster = utils.generateJailRoster()
+
+    TriggerClientEvent('xt-prison:client:openPrivateJailRoster', source, jailRoster)
+end)
+
 
 -- Jail/Unjail Player Commands --
 if config.EnableJailCommand then

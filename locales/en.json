@@ -29,7 +29,8 @@
         "jail":"Jail Player",
         "unjail":"Unjail a Player",
         "playerid":"Player ID",
-        "check_time":"Check your jail time"
+        "check_time":"Check your jail time",
+        "prisoners_roster":"View and manage current prisoners"
     },
 
     "input":{

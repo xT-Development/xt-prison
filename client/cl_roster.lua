@@ -62,33 +62,6 @@ local function rosterActionMenu(info)
     lib.showContext('prisoners_roster_actions')
 end
 
-RegisterCommand('prisoners', function()
-    local jailRoster = lib.callback.await('xt-prison:server:getJailRoster', false)
-    if not jailRoster then return end
-
-    if not jailRoster[1] then
-        jailRoster = {
-            {
-                title = 'No Prisoners!',
-                readOnly = true
-            }
-        }
-    else
-        for x = 1, #jailRoster do
-            jailRoster[x].onSelect = function()
-                rosterActionMenu(jailRoster[x].private)
-            end
-        end
-    end
-
-    lib.registerContext({
-        id = 'prisoners_roster',
-        title = 'Jail Roster',
-        options = jailRoster
-    })
-    lib.showContext('prisoners_roster')
-end)
-
 local function openPublicRoster()
     local jailRoster = lib.callback.await('xt-prison:server:getJailRoster', false)
     if not jailRoster then return end
@@ -134,6 +107,33 @@ end
 local function removeRosterZone()
     exports.ox_target:removeZone(rosterZone)
 end
+
+-- Open Prisoners Manageable Roster as Cop --
+RegisterNetEvent('xt-prison:client:openPrivateJailRoster', function(jailRoster)
+    if GetInvokingResource() then return end
+
+    if not jailRoster[1] then
+        jailRoster = {
+            {
+                title = 'No Prisoners!',
+                readOnly = true
+            }
+        }
+    else
+        for x = 1, #jailRoster do
+            jailRoster[x].onSelect = function()
+                rosterActionMenu(jailRoster[x].private)
+            end
+        end
+    end
+
+    lib.registerContext({
+        id = 'prisoners_roster',
+        title = 'Jail Roster',
+        options = jailRoster
+    })
+    lib.showContext('prisoners_roster')
+end)
 
 AddEventHandler('onResourceStart', function(resource)
     if resource ~= GetCurrentResourceName() then return end
