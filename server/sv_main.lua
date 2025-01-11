@@ -171,8 +171,12 @@ AddEventHandler('onResourceStart', function(resource)
         local count = 0
 
         for _, src in pairs(players) do
-            if charHasJob(tonumber(src), config.policeJobs) then
-                count += 1
+            src = src and tonumber(src) or false
+            local player = src and getPlayer(src) or false
+            if player then
+                if charHasJob(src, config.policeJobs) then
+                    count += 1
+                end
             end
         end
 
