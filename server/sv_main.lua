@@ -39,7 +39,7 @@ end)
 
 -- Remove Player Job --
 lib.callback.register('xt-prison:server:removeJob', function(source)
-    if charHasJob(source, config.UnemployedJobName) then
+    if not charHasJob(source, config.UnemployedJobName) then
         if setCharJob(source, config.UnemployedJobName) then
             lib.notify(source, {
                 title = locale('notify.lost_job'),

@@ -1,7 +1,6 @@
 if GetResourceState('qb-core') ~= 'started' or GetResourceState('qbx_core') == 'started' then return end
 
 local QBCore = exports['qb-core']:GetCoreObject()
-local config = require 'configs.server'
 
 function getPlayer(src)
     return QBCore.Functions.GetPlayer(src)
@@ -25,7 +24,7 @@ end
 
 function setCharJob(src, job)
     local player = getPlayer(src)
-    return player and player.Functions.SetJob(config.UnemployedJobName) or nil
+    return player and player.Functions.SetJob(job) or nil
 end
 
 function setJailTime(src, time)
@@ -40,6 +39,8 @@ function setJailTime(src, time)
     while playerState and (playerState.jailTime ~= time) do
         Wait(1)
     end
+
+    syncJailCompatibility(src, time)
 
     return playerState and (playerState.jailTime == time) or false
 end exports('SetJailTime', setJailTime)
