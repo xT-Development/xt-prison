@@ -39,5 +39,7 @@ function setJailTime(src, time)
         Wait(1)
     end
 
+    syncJailCompatibility(src, time)
+
     return playerState and (playerState.jailTime == time) or false
 end exports('SetJailTime', setJailTime)

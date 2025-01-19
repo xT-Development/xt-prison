@@ -1,15 +1,18 @@
-local resources     = require 'bridge.compat.resources'
 local utils         = require 'modules.server.utils'
+local resources     = require 'bridge.compat.resources'
+
+-- When setJailTime is called, compat for other resources is called
+function syncJailCompatibility(src, time)
+    if resources.randol_medical then
+        exports.randol_medical:SetJailState(src, (time > 0))
+    end
+
+    -- Add other compat here (Medical, etc)
+end
 
 -- Compat for QB/QBX Prison Original Event --
 RegisterNetEvent('prison:server:SetJailStatus', function(jailTime)
     local src = source
-
-    if resources.randol_medical then
-        local playerState = Player(src).state
-        playerState:set('jail', (jailTime > 0), true)
-    end
-
     setJailTime(src, ((jailTime < 0) and 0 or jailTime))
 end)
 
