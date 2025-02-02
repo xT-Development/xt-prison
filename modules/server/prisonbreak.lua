@@ -11,17 +11,13 @@ function prisonModules.prisonBreakout(src)
     local playerState = Player(src)?.state
     if not playerState then return end
 
+    setJailTime(src, 0) -- Set jail time to zero
+
+    -- Delete Confiscated Inv --
     local CID = getCharID(src)
-    local jailTime = playerState.jailTime
-
-    if jailTime ~= 0 and jailTime > 0 then
-        setJailTime(src, 0)
-
-        -- Delete Confiscated Inv --
-        local getInv = MySQL.query.await(db.GET_INVENTORY, { CID, CID })
-        if getInv and getInv[1] then
-            MySQL.query(db.DELETE_INVENTORY, { CID })
-        end
+    local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { CID })
+    if next(confiscatedItems) then
+        MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { CID })
     end
 
     return (playerState.jailTime == 0)
