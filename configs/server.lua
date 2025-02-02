@@ -26,5 +26,10 @@ return {
     Lifers = {                                  -- Lifer identifiers
         'RANDOLIOCID',
         'QWADEBOTCID'
-    }
+    },
+
+    banPlayer = function(source, cid)
+        -- Implement your own ban functions/logging here
+        -- This function passes the player source and player core identifier
+    end
 }

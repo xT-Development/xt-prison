@@ -83,14 +83,14 @@ end)
 -- Return Items on Exit --
 RegisterNetEvent('xt-prison:server:returnItems', function()
     local src = source
+    local cid = getCharID(src)
     if Player(src).state.jailTime > 0 then
-        -- TODO: Add exploit ban
+        utils.banPlayer(src, cid)
         return
     end
 
     if not confiscated[src] then return end
 
-    local cid = getCharID(src)
     local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid }) -- Get Confiscated Items
     confiscatedItems = json.decode(confiscatedItems) or {}

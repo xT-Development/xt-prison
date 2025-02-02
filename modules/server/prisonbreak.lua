@@ -46,7 +46,8 @@ function prisonModules.setTerminalHackedState(src, terminalID, setState)
     if globalState[('PrisonTerminal_%s'):format(terminalID)].isHacked == setState then return end
 
     if globalState[('PrisonTerminal_%s'):format(terminalID)].lastHacker ~= src then
-        -- TODO: Add exploit ban here
+        local cid = getCharID(src)
+        utils.banPlayer(src, cid)
         return
     end
 

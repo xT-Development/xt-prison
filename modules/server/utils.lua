@@ -119,4 +119,8 @@ function utils.generateJailRoster()
     return roster
 end
 
+function utils.banPlayer(...)
+    return config.banPlayer(...)
+end
+
 return utils
