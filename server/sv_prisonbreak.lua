@@ -21,7 +21,7 @@ end)
 
 RegisterNetEvent('xt-prison:server:setPrisonAlarmsChance', function(success)
     local alarmChance = success and prisonBreakcfg.AlarmChanceOnHack.success or prisonBreakcfg.AlarmChanceOnHack.fail
-    if math.random(100) <= alarmChance then return end
+    if math.random(100) < alarmChance then return end
     setPrisonAlarms(true)
 end)
 
@@ -40,7 +40,7 @@ RegisterNetEvent('xt-prison:server:removePrisonbreakItems', function(success)
     local src = source
 
     local removeItemsChance = success and prisonBreakcfg.RemoveItemsChanceOnHack.success or prisonBreakcfg.RemoveItemsChanceOnHack.fail
-    if math.random(100) <= removeItemsChance then return end
+    if math.random(100) < removeItemsChance then return end
 
     local requiredItems = prisonBreakcfg.RequiredItems
     local removedCount = 0
