@@ -1,7 +1,6 @@
 return {
     DebugPoly = false,
     Freedom = vec4(1842.58, 2573.43, 45.89, 357.77), -- Freedom spawn coords
-    RemoveJob = true,          -- Remove player jobs when send to jail
 
     -- Create Target Zone to Check Time (if XTPrisonJobs is false) --
     CheckOut = {
@@ -141,7 +140,7 @@ return {
     Dispatch = function(coords)
         -- exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
-        
+
        -- ND Core
         -- exports["ND_MDT"]:createDispatch({
         --             caller = "Boilingbroke Penitentiary",

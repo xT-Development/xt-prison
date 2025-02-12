@@ -1,6 +1,7 @@
 return {
     EnableJailCommand = true,                   -- Jail command using ox_lib input menu
 
+    RemoveJob = true,                           -- Remove player jobs when send to jail
     UnemployedJobName = 'unemployed',           -- Name of unemployed job (if remove job is enabled)
 
     CanteenMeal = {                             -- Food & Drink received from canteen

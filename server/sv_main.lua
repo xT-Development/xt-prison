@@ -26,37 +26,21 @@ local function loadPlayerJailTime(src)
     return setTime and getJailTime or 0
 end
 
--- Get Jail Time --
-lib.callback.register('xt-prison:server:initJailTime', function(source)
-    return loadPlayerJailTime(source)
-end)
+local function setJailState(src, setTime)
+    local playerState = Player(src)?.state
+    if not playerState then return false end
 
--- Save Jail Time --
-RegisterNetEvent('xt-prison:server:saveJailTime', function()
-    local src = source
-    savePlayerJailTime(src)
-end)
-
--- Remove Player Job --
-lib.callback.register('xt-prison:server:removeJob', function(source)
-    if not charHasJob(source, config.UnemployedJobName) then
-        if setCharJob(source, config.UnemployedJobName) then
-            lib.notify(source, {
-                title = locale('notify.lost_job'),
-                icon = 'fas fa-ban',
-                type = 'error'
-            })
-            return true
-        end
-    else
+    local jailTime = playerState.jailTime
+    if jailTime == setTime then
         return true
     end
 
-    return false
-end)
+    local set = setJailTime(src, ((setTime < 0) and 0 or setTime))
 
--- Remove Items on Entry --
-RegisterNetEvent('xt-prison:server:removeItems', function()
+    return set
+end
+
+local function removeItemsOnEntry()
     local src = source
     if confiscated[src] then return end
 
@@ -78,6 +62,24 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
     end
 
     confiscated[src] = true
+end
+
+local function removeJob(src)
+    if charHasJob(src, config.UnemployedJobName) then return end
+
+    if setCharJob(src, config.UnemployedJobName) then
+        lib.notify(src, {
+            title = locale('notify.lost_job'),
+            icon = 'fas fa-ban',
+            type = 'error'
+        })
+    end
+end
+
+-- Save Jail Time --
+RegisterNetEvent('xt-prison:server:saveJailTime', function()
+    local src = source
+    savePlayerJailTime(src)
 end)
 
 -- Return Items on Exit --
@@ -122,20 +124,30 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
     end
 end)
 
--- Set Jail Time --
-lib.callback.register('xt-prison:server:setJailStatus', function(source, setTime)
-    local src = source
-    local playerState = Player(src)?.state
-    if not playerState then return end
+-- Get Jail Time --
+lib.callback.register('xt-prison:server:initJailTime', function(source)
+    return loadPlayerJailTime(source)
+end)
 
-    local jailTime = playerState.jailTime
-    if jailTime == setTime then
-        return true
+-- Player Enters Prison --
+lib.callback.register('xt-prison:server:enterPrison', function(source, setTime)
+    local set = setJailState(source, setTime)
+    if not set then return false end
+
+    removeItemsOnEntry()
+
+    if config.RemoveJob then
+        removeJob(source)
     end
 
-    setJailTime(src, ((setTime < 0) and 0 or setTime))
-
     return true
+end)
+
+-- ONLY Set Jail Time --
+-- Currently unused but might be re-used in the future, not sure
+lib.callback.register('xt-prison:server:setJailStatus', function(source, setTime)
+    local setState = setJailState(source, setTime)
+    return setState
 end)
 
 -- Check if Player is a Lifer --

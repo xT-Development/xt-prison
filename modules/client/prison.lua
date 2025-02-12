@@ -138,21 +138,8 @@ end
 
 -- Entering Prison --
 function prisonModules.enterPrison(setTime)
-    local setServerJailTime = lib.callback.await('xt-prison:server:setJailStatus', false, setTime)
-    if not setServerJailTime then
-        return false
-    end
-
-    if config.RemoveJob then
-        local removed = lib.callback.await('xt-prison:server:removeJob', false)
-        if not removed then
-            return false
-        end
-    end
-
-    local setJailTime = prisonModules.setJailTime(setTime)
-    if setJailTime then
-        TriggerServerEvent('xt-prison:server:removeItems')
+    local enteredPrison = lib.callback.await('xt-prison:server:enterPrison', false, setTime)
+    if enteredPrison then
         local isLifer = lib.callback.await('xt-prison:server:liferCheck', false)
 
         DoScreenFadeOut(2000)
