@@ -2,22 +2,10 @@ local db                = require 'modules.server.db'
 local config            = require 'configs.server'
 local prisonBreakcfg    = require 'configs.prisonbreak'
 local utils             = require 'modules.server.utils'
+local manager           = require 'modules.server.manager'
 local ox_inventory      = exports.ox_inventory
 local globalState       = GlobalState
 local confiscated       = {}
-
-local function savePlayerJailTime(src)
-    local state = Player(src).state
-    local jailTime = state and state.jailTime or 0
-    local cid = getCharID(src) or state and state.xtprison_identifier
-    if not cid then return lib.print.debug('player core identifier not found, not saving jailtime') end
-    MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
-
-    if confiscated[src] then
-        ox_inventory:ReturnInventory(src)
-        confiscated[src] = nil
-    end
-end
 
 local function loadPlayerJailTime(src)
     local cid = getCharID(src)
@@ -42,8 +30,6 @@ end
 
 local function removeItemsOnEntry()
     local src = source
-    if confiscated[src] then return end
-
     local cid = getCharID(src)
     local playerItems = ox_inventory:GetInventoryItems(src)
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid })
@@ -60,38 +46,14 @@ local function removeItemsOnEntry()
             type = 'error'
         })
     end
-
-    confiscated[src] = true
 end
 
-local function removeJob(src)
-    if charHasJob(src, config.UnemployedJobName) then return end
-
-    if setCharJob(src, config.UnemployedJobName) then
-        lib.notify(src, {
-            title = locale('notify.lost_job'),
-            icon = 'fas fa-ban',
-            type = 'error'
-        })
-    end
-end
-
--- Save Jail Time --
-RegisterNetEvent('xt-prison:server:saveJailTime', function()
-    local src = source
-    savePlayerJailTime(src)
-end)
-
--- Return Items on Exit --
-RegisterNetEvent('xt-prison:server:returnItems', function()
-    local src = source
+local function returnItemsOnExit(src)
     local cid = getCharID(src)
     if Player(src).state.jailTime > 0 then
         utils.banPlayer(src, cid)
         return
     end
-
-    if not confiscated[src] then return end
 
     local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid }) -- Get Confiscated Items
@@ -109,8 +71,6 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
         MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { cid })
     end
 
-    confiscated[src] = nil
-
     lib.notify(src, {
         title = locale('notify.returned_items'),
         icon = 'fas fa-hand-holding-heart',
@@ -122,7 +82,19 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
             ox_inventory:AddItem(src, info.name, info.count, info.metadata)
         end
     end
-end)
+end
+
+local function removeJob(src)
+    if charHasJob(src, config.UnemployedJobName) then return end
+
+    if setCharJob(src, config.UnemployedJobName) then
+        lib.notify(src, {
+            title = locale('notify.lost_job'),
+            icon = 'fas fa-ban',
+            type = 'error'
+        })
+    end
+end
 
 -- Get Jail Time --
 lib.callback.register('xt-prison:server:initJailTime', function(source)
@@ -130,17 +102,43 @@ lib.callback.register('xt-prison:server:initJailTime', function(source)
 end)
 
 -- Player Enters Prison --
+-- Handles server side entering. Removes job, items and adds to jailed players table
 lib.callback.register('xt-prison:server:enterPrison', function(source, setTime)
     local set = setJailState(source, setTime)
     if not set then return false end
 
+    manager.addToJailedPlayers(source, setTime) -- Add to jailed players table
     removeItemsOnEntry()
 
     if config.RemoveJob then
         removeJob(source)
     end
 
+    local isLifer = utils.liferCheck(source) -- Check if player is a lifer, for proper notifications
+
+    return true, isLifer
+end)
+
+-- Player Exits Prison --
+-- Handles server side exiting. Return items and remove from jailed players table
+lib.callback.register('xt-prison:server:exitPrison', function(source)
+    local set = setJailState(source, 0) -- Ensure the state is set to 0
+    if not set then return false end
+
+    manager.removeFromJailedPlayers(source) -- Remove from jailed players table
+    returnItemsOnExit(source)
+
     return true
+end)
+
+-- Receive Canteen Meal --
+lib.callback.register('xt-prison:server:receiveCanteenMeal', function(source)
+    local food = config.CanteenMeal.food
+    local drink = config.CanteenMeal.drink
+    if ox_inventory:AddItem(source, food.item, food.count) and ox_inventory:AddItem(source, drink.item, drink.count) then
+        return true
+    end
+    return false
 end)
 
 -- ONLY Set Jail Time --
@@ -153,16 +151,6 @@ end)
 -- Check if Player is a Lifer --
 lib.callback.register('xt-prison:server:liferCheck', function(source)
     return utils.liferCheck(source)
-end)
-
--- Receive Canteen Meal --
-lib.callback.register('xt-prison:server:receiveCanteenMeal', function(source)
-    local food = config.CanteenMeal.food
-    local drink = config.CanteenMeal.drink
-    if ox_inventory:AddItem(source, food.item, food.count) and ox_inventory:AddItem(source, drink.item, drink.count) then
-        return true
-    end
-    return false
 end)
 
 -- Checks Time Left --
@@ -196,9 +184,4 @@ AddEventHandler('onResourceStart', function(resource)
             globalState.copCount = count
         end
     end, 120000)
-end)
-
-AddEventHandler('playerDropped', function(reason)
-    local src = source
-    savePlayerJailTime(src)
 end)
