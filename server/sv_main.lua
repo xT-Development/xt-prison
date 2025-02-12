@@ -28,8 +28,7 @@ local function setJailState(src, setTime)
     return set
 end
 
-local function removeItemsOnEntry()
-    local src = source
+local function removeItemsOnEntry(src)
     local cid = getCharID(src)
     local playerItems = ox_inventory:GetInventoryItems(src)
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid })
@@ -108,7 +107,7 @@ lib.callback.register('xt-prison:server:enterPrison', function(source, setTime)
     if not set then return false end
 
     manager.addToJailedPlayers(source, setTime) -- Add to jailed players table
-    removeItemsOnEntry()
+    removeItemsOnEntry(source)
 
     if config.RemoveJob then
         removeJob(source)
