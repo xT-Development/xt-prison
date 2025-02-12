@@ -13,21 +13,6 @@ local CheckOutZone
 
 local prisonModules = {}
 
--- Set Jail Time --
-function prisonModules.setJailTime(jailTime)
-    if playerState.jailTime == jailTime then
-        return true
-    end
-
-    playerState:set('jailTime', jailTime, true)
-
-    while playerState.jailTime ~= jailTime do
-        Wait(1)
-    end
-
-    return (playerState.jailTime == jailTime)
-end
-
 -- Create Checkout Location --
 function prisonModules.createCheckoutLocation()
     if resources.xt_prisonjobs then return end
@@ -117,7 +102,6 @@ end
 
 -- Removes All Prison Zones, Blips, etc --
 function prisonModules.prisonCleanup()
-    TriggerServerEvent('xt-prison:server:saveJailTime')
     PrisonZone:remove()
     prisonModules.removeCheckoutLocation()
     prisonBreakModules.removeBlip()
@@ -138,10 +122,8 @@ end
 
 -- Entering Prison --
 function prisonModules.enterPrison(setTime)
-    local enteredPrison = lib.callback.await('xt-prison:server:enterPrison', false, setTime)
+    local enteredPrison, isLifer = lib.callback.await('xt-prison:server:enterPrison', false, setTime) -- Enter prison, and check/return if player is a lifer
     if enteredPrison then
-        local isLifer = lib.callback.await('xt-prison:server:liferCheck', false)
-
         DoScreenFadeOut(2000)
         while not IsScreenFadedOut() do Wait(25) end
 
@@ -187,10 +169,6 @@ function prisonModules.enterPrison(setTime)
             lib.notify({ title = locale('notify.lifer'), type = 'error' })
         end
 
-        if not isLifer then
-            prisonModules.timeReductionLoop()
-        end
-
         if resources.xt_prisonjobs then
             exports['xt-prisonjobs']:InitPrisonJob()
         end
@@ -204,11 +182,14 @@ end
 -- Exiting Prison --
 function prisonModules.exitPrison(isUnjailed)
     if playerState.jailTime > 0 and not isUnjailed then
-        lib.notify({ title = (locale('notify.time_left')):format(playerState.jailTime), type = 'error' })
+        lib.notify({
+            title = (locale('notify.time_left')):format(playerState.jailTime),
+            type = 'error'
+        })
         return false
 	elseif playerState.jailTime <= 0 or isUnjailed then
-        local setJailTime = prisonModules.setJailTime(0)
-        if setJailTime then
+        local exitPrison = lib.callback.await('xt-prison:server:exitPrison', false)
+        if exitPrison then
             inJail = false
 
             DoScreenFadeOut(2000)
@@ -224,8 +205,6 @@ function prisonModules.exitPrison(isUnjailed)
             DoScreenFadeIn(2000)
             while not IsScreenFadedIn() do Wait(25) end
 
-            TriggerServerEvent('xt-prison:server:returnItems')
-
             if resources.xt_prisonjobs then
                 exports['xt-prisonjobs']:CleanupPrisonJob()
             end
@@ -235,26 +214,6 @@ function prisonModules.exitPrison(isUnjailed)
 	end
 
     return false
-end
-
--- Reduce Jail Time Loop --
-function prisonModules.timeReductionLoop()
-    CreateThread(function()
-        while inJail do
-            if playerState.jailTime > 0 then
-                local newTime = (playerState.jailTime - 1)
-                prisonModules.setJailTime(newTime)
-            elseif playerState.jailTime <= 0 then
-                lib.notify({
-                    title = locale('notify.checkout'),
-                    icon = 'fas fa-unlock',
-                    type = 'success'
-                })
-                break
-            end
-            Wait(60000)
-        end
-    end)
 end
 
 function prisonModules.applyPrisonUniform()

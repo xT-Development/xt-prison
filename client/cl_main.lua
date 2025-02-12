@@ -29,7 +29,7 @@ local function playerLoaded()
 
     Wait(500)
 
-    local jailTime = lib.callback.await('xt-prison:server:initJailTime', false)
+    local jailTime = lib.callback.await('xt-prison:server:initJailTime', false) -- Init the statebag
     if jailTime and jailTime ~= 0 and jailTime > 0 then
         prisonModules.enterPrison(jailTime)
     end
