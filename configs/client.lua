@@ -120,6 +120,23 @@ return {
         }
     },
 
+    playBuckleSound     = function()
+        if GetResourceState('qbx_core') == 'started' then
+            qbx.loadAudioBank('audiodirectory/jail_sounds')
+            qbx.playAudio({
+                audioName = 'jail',
+                audioRef = 'jail_soundset',
+                source = cache.ped
+            })
+            ReleaseNamedScriptAudioBank('audiodirectory/jail_sounds')
+        else
+            RequestScriptAudioBank('audiodirectory/jail_sounds', false)
+            PlaySoundFromEntity(GetSoundId(), 'jail', cache.ped, 'jail_soundset', false, false)
+            ReleaseNamedScriptAudioBank('audiodirectory/jail_sounds')
+        end
+    end,
+
+
     -- Reloads Player's Last Skin When Freed --
     ResetClothing = function()
         -- TriggerEvent('illenium-appearance:client:reloadSkin', true)
