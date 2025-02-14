@@ -122,6 +122,7 @@ return {
 
     playJailSound     = function()
         if GetResourceState('qbx_core') == 'started' then
+            -- '@qbx_core/modules/lib.lua', import this if using QBOX
             qbx.loadAudioBank('audiodirectory/jail_sounds')
             qbx.playAudio({
                 audioName = 'jail',
