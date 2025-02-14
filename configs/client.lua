@@ -120,7 +120,7 @@ return {
         }
     },
 
-    playBuckleSound     = function()
+    playJailSound     = function()
         if GetResourceState('qbx_core') == 'started' then
             qbx.loadAudioBank('audiodirectory/jail_sounds')
             qbx.playAudio({
