@@ -178,7 +178,7 @@ function prisonModules.enterPrison(setTime)
 
         FreezeEntityPosition(cache.ped, false)
 
-        TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
+        config.playJailSound()
 
         config.Emote(RandomSpawn.emote)
         prisonModules.createCheckoutLocation()

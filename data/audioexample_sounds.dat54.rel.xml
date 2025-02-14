@@ -1,0 +1,31 @@
+<Dat54>
+  <Version value="7314721" />
+  <ContainerPaths>
+    <Item>audiodirectory\jail_sounds</Item>
+  </ContainerPaths>
+  <Items>
+    <Item type="SimpleSound">
+      <Name>jail_sp</Name>
+      <Header>
+        <Flags value="0x00008004" />
+        <Volume value="200" />
+        <Category>scripted</Category>
+      </Header>
+      <ContainerName>audiodirectory/jail_sounds</ContainerName>
+      <FileName>jail</FileName>
+      <WaveSlotNum value="0" />
+    </Item>
+    <Item type="SoundSet">
+      <Name>jail_soundset</Name>
+      <Header>
+        <Flags value="0xAAAAAAAA" />
+      </Header>
+      <SoundSets>
+        <Item>
+          <ScriptName>jail</ScriptName>
+          <ChildSound>jail_sp</ChildSound>
+        </Item>
+      </SoundSets>
+    </Item>
+  </Items>
+</Dat54>
