@@ -1,8 +1,9 @@
-local utils = require 'modules.server.utils'
+local utils     = require 'modules.server.utils'
+local manager   = require 'modules.server.manager'
 
 -- View Jail Roster --
 lib.callback.register('xt-prison:server:getJailRoster', function(source)
-    return utils.generateJailRoster()
+    return manager.getJailedPlayersRoster()
 end)
 
 -- Unjails Player via Roster --

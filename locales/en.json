@@ -19,6 +19,7 @@
         "time_left":"You have %s months left.",
         "no_time_left":"You don't have any jail time left!",
         "time_remaining":"Time Remaining: %s Months",
+        "awaiting_checkout":"Awaiting Checkout",
         "completed_hack":"You completed the hack!",
         "failed_hack":"You failed the hack!",
         "escaped":"You escaped prison!",

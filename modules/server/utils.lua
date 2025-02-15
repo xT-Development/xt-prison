@@ -61,6 +61,7 @@ function utils.terminalDistanceCheck(player1, terminal)
     return (dist < 3)
 end
 
+-- Check Player Jail Time --
 function utils.checkJailTime(source)
     local playerState = Player(source)?.state
     local isLifer = utils.liferCheck(source)
@@ -95,30 +96,7 @@ function utils.checkJailTime(source)
     return jailTime
 end
 
-function utils.generateJailRoster()
-    local roster = {}
-    local players = GetPlayers()
-
-    for _, src in pairs(players) do
-        local state = Player(tonumber(src)).state
-        if state and state.jailTime > 0 then
-            local charName = getCharName(tonumber(src))
-            roster[#roster + 1] = {
-                title = charName,
-                description = (locale('notify.time_remaining')):format(state.jailTime),
-                icon = 'fas fa-user-lock',
-                private = {
-                    source = tonumber(src),
-                    name = charName,
-                    jailTime = state.jailTime
-                }
-            }
-        end
-    end
-
-    return roster
-end
-
+-- Handles Banning Player --
 function utils.banPlayer(...)
     return config.banPlayer(...)
 end

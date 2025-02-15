@@ -1,5 +1,6 @@
 local config    = require 'configs.server'
 local utils     = require 'modules.server.utils'
+local manager   = require 'modules.server.manager'
 
 -- Check Jail Time --
 lib.addCommand('jailtime', {
@@ -24,7 +25,7 @@ lib.addCommand('prisoners', {
         return
     end
 
-    local jailRoster = utils.generateJailRoster()
+    local jailRoster = manager.getJailedPlayersRoster()
 
     TriggerClientEvent('xt-prison:client:openPrivateJailRoster', source, jailRoster)
 end)

@@ -42,6 +42,7 @@ end, true)
 -- TIME REDUCTION
 local function reduceAllJailedPlayersTimes()
     for src in pairs(jailedPlayers) do
+        src = (type(src) == "number") and src or tonumber(src)
         local isLifer = utils.liferCheck(src)
         if not isLifer then
             local state = Player(src).state
@@ -97,5 +98,34 @@ end
 function manager.isPlayerJailed(src)
     return (jailedPlayers[src] ~= nil)
 end exports('isPlayerJailed', manager.isPlayerJailed)
+
+function manager.getJailedPlayers() -- Get jailed players table
+    return jailedPlayers
+end exports('getJailedPlayers', manager.getJailedPlayers)
+
+function manager.getJailedPlayersRoster() -- Return jailed players as a roster
+    local roster = {}
+
+    for src in pairs(jailedPlayers) do
+        src = type(src) == "number" and src or tonumber(src)
+        local state = Player(src).state
+        if state then
+            local statusStr = (state.jailTime > 0) and (locale('notify.time_remaining')):format(state.jailTime) or locale('notify.awaiting_checkout')
+            local charName = getCharName(src)
+            roster[#roster + 1] = {
+                title = charName,
+                description = statusStr,
+                icon = 'fas fa-user-lock',
+                private = {
+                    source = src,
+                    name = charName,
+                    jailTime = state.jailTime
+                }
+            }
+        end
+    end
+
+    return roster
+end
 
 return manager
