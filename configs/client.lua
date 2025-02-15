@@ -2,7 +2,7 @@ return {
     DebugPoly = false,
     Freedom = vec4(1842.58, 2573.43, 45.89, 357.77), -- Freedom spawn coords
 
-    -- Create Target Zone to Check Time (if XTPrisonJobs is false) --
+    -- Create Target Zone to Check Time (if xt-prisonjobs is not running) --
     CheckOut = {
         coords = vec3(1836.5, 2592.05, 46.35),
         size = vec3(0.9, 7.8, 1.45),
