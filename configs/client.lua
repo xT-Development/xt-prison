@@ -149,4 +149,8 @@ return {
         --             coords = vec3(1845.8302, 2585.9011, 45.6726)
         --         })
     end,
+
+    PlayJailSound = function()
+        -- TriggerServerEvent("InteractSound_SV:PlayOnSource", "jail", 0.5)
+    end
 }
