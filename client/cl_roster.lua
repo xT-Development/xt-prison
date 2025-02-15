@@ -102,10 +102,12 @@ local function createRosterZone()
             }
         }
     })
+    -- TODO: Add qb-target compat here but I cba
 end
 
 local function removeRosterZone()
     exports.ox_target:removeZone(rosterZone)
+    -- TODO: Add qb-target compat here but I cba
 end
 
 -- Open Prisoners Manageable Roster as Cop --
