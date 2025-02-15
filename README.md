@@ -32,8 +32,12 @@
 # Dependencies:
 - [ox_lib](https://github.com/overextended/ox_lib/releases)
 - [ox_inventory](https://github.com/overextended/ox_inventory/releases)
-- [ox_target](https://github.com/overextended/ox_target/releases)
+- [ox_target](https://github.com/overextended/ox_target/releases) or qb-target
 - [ox_doorlock](https://github.com/overextended/ox_doorlock/releases)
+
+# Compatability
+- [xt-prisonjobs](https://xtdev.tebex.io/package/5226873)
+- [randol_medical](https://forum.cfx.re/t/paid-esx-qb-qbx-randolio-medical/5246310)
 
 # Supported Frameworks:
 - 🟩 | QB / QBX
@@ -42,6 +46,7 @@
 - 🟩 | ND
 
 # [Documentation](https://xtdev.gitbook.io/xt-docs/free-resources/xt-prison)
+# [Free Prison MLO (Pre-Configured)](https://www.gta5-mods.com/maps/prison-3-mlo-interiors-bolingbroke-penitentiary-fivem-ragemp)
 
 ### Credits
 S/o to [qb-prison](https://i.giphy.com/media/v1.Y2lkPTc5MGI3NjExa2ZtbDFndTg2ZG83YmYycmZqdWkybWp1aDQ3dnE1YW9oNGl5YW55aiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/OOQtlBzlVuiHe/giphy.gif) for pissing me off long enough to make ~~5, 6, 7~~, lost count... different prison resources.
