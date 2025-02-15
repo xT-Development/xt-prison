@@ -47,18 +47,20 @@ local function reduceAllJailedPlayersTimes()
         if not isLifer then
             local state = Player(src).state
             local jailTime = state and state.jailTime or 0
-            local newJailTime = (jailTime - 1)
-            if newJailTime <= 0 then
-                newJailTime = 0
+            if jailTime > 0 then -- Prevents spam notification every minute when time = 0
+                local newJailTime = (jailTime - 1)
+                if newJailTime <= 0 then
+                    newJailTime = 0
 
-                lib.notify(src, {
-                    title = locale('notify.checkout'),
-                    icon = 'fas fa-unlock',
-                    type = 'success'
-                })
+                    lib.notify(src, {
+                        title = locale('notify.checkout'),
+                        icon = 'fas fa-unlock',
+                        type = 'success'
+                    })
+                end
+
+                state.jailTime = newJailTime
             end
-
-            state.jailTime = newJailTime
         end
     end
 end
