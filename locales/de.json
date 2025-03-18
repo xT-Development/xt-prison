@@ -1,0 +1,46 @@
+{
+    "notify": {
+        "freedom": "Freiheit!",
+        "new_time_by_roster": "Neue Haftzeit",
+        "new_time_by_roster_description": "Deine Haftzeit wurde auf %s Monate gesetzt!",
+        "unjailed_by_roster": "Deine Haftzeit wurde auf null gesetzt, du wirst entlassen!",
+        "no_access": "Du hast keinen Zugriff auf diesen Befehl!",
+        "updated_players_time": "Haftzeit von %s auf %s Monate aktualisiert",
+        "player_sent": "%s für %s Monate ins Gefängnis geschickt",
+        "time_updated_description": "Deine Haftzeit wurde auf %s Monate gesetzt",
+        "time_updated": "Haftzeit aktualisiert",
+        "invalid_player": "Ungültiger Spieler!",
+        "lost_job": "Du hast deinen Job verloren!",
+        "confiscated": "Deine Gegenstände wurden konfisziert!",
+        "returned_items": "Deine Gegenstände wurden zurückgegeben!",
+        "player_released": "%s wurde freigelassen!",
+        "lifer": "Du bist lebenslänglich im Gefängnis!",
+        "jail_time": "Haftzeit",
+        "time_left": "Du hast noch %s Monate.",
+        "no_time_left": "Du hast keine Haftzeit mehr!",
+        "time_remaining": "Verbleibende Zeit: %s Monate",
+        "completed_hack": "Du hast den Hack abgeschlossen!",
+        "failed_hack": "Der Hack ist fehlgeschlagen!",
+        "escaped": "Du hast das Gefängnis verlassen!",
+        "checkout": "Deine Zeit ist abgelaufen! Gehe zum Checkout!"
+    },
+
+    "commands": {
+        "jail": "Spieler ins Gefängnis schicken",
+        "unjail": "Spieler aus dem Gefängnis entlassen",
+        "playerid": "Spieler-ID",
+        "check_time": "Überprüfe deine Haftzeit",
+        "prisoners_roster": "Aktuelle Gefangene anzeigen und verwalten"
+    },
+
+    "input": {
+        "jail_player": "Spieler ins Gefängnis schicken",
+        "playerid": "Spieler Server ID",
+        "jailtime": "Haftzeit",
+        "months": "Monate (Minuten)",
+        "hack_gate": "Gefängnistor hacken",
+        "hacking": "Terminal wird gehackt...",
+        "check_time": "Haftzeit überprüfen",
+        "prison_sentence": "**Haftstrafe:** %s  \n%s"
+    }
+}
