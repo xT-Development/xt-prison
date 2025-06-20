@@ -11,7 +11,6 @@ version '1.4.5'
 shared_scripts { '@ox_lib/init.lua' }
 
 client_scripts {
-    -- '@qbx_core/modules/lib.lua', uncomment this if using qbox
     'bridge/client/*.lua',
     'client/*.lua'
 }

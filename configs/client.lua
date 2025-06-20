@@ -122,7 +122,8 @@ return {
 
     playJailSound     = function()
         if GetResourceState('qbx_core') == 'started' then
-            -- '@qbx_core/modules/lib.lua', import this if using QBOX
+            lib.load('@qbx_core.modules.lib')
+
             qbx.loadAudioBank('audiodirectory/jail_sounds')
             qbx.playAudio({
                 audioName = 'jail',
@@ -159,7 +160,7 @@ return {
     Dispatch = function(coords)
         -- exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
-        
+
        -- ND Core
         -- exports["ND_MDT"]:createDispatch({
         --             caller = "Boilingbroke Penitentiary",
