@@ -1,0 +1,44 @@
+{
+  "notify": {
+    "freedom": "Wolność!",
+    "new_time_by_roster": "Nowy wyrok",
+    "new_time_by_roster_description": "Twój wyrok został ustawiony na %s miesięcy!",
+    "unjailed_by_roster": "Twój wyrok został zerowany, zostajesz zwolniony!",
+    "no_access": "Nie masz dostępu do tej komendy!",
+    "updated_players_time": "Zaktualizowano wyrok gracza %s do %s miesięcy",
+    "player_sent": "Wysłano %s do więzienia na %s miesięcy",
+    "time_updated_description": "Twój wyrok został ustawiony na %s miesięcy",
+    "time_updated": "Wyrok zaktualizowany",
+    "invalid_player": "Nieprawidłowy gracz!",
+    "lost_job": "Stracono pracę!",
+    "confiscated": "Twoje przedmioty zostały skonfiskowane!",
+    "returned_items": "Twoje przedmioty zostały zwrócone!",
+    "player_released": "%s został zwolniony!",
+    "lifer": "Masz dożywocie!",
+    "jail_time": "Wyrok więzienia",
+    "time_left": "Pozostało Ci %s miesięcy.",
+    "no_time_left": "Nie masz już wyroku do odsiadki!",
+    "time_remaining": "Pozostały czas: %s miesięcy",
+    "completed_hack": "Udało Ci się zhakować!",
+    "failed_hack": "Nie udało się zhakować!",
+    "escaped": "Uciekłeś z więzienia!",
+    "checkout": "Twój czas minął! Możesz wyjść!"
+  },
+  "commands": {
+    "jail": "Wsadź gracza do więzienia",
+    "unjail": "Zwolnij gracza z więzienia",
+    "playerid": "ID gracza",
+    "check_time": "Sprawdź swój wyrok",
+    "prisoners_roster": "Zobacz i zarządzaj obecnymi więźniami"
+  },
+  "input": {
+    "jail_player": "Wsadź gracza do więzienia",
+    "playerid": "ID gracza na serwerze",
+    "jailtime": "Długość wyroku",
+    "months": "Miesiące (Minuty)",
+    "hack_gate": "Hakuj bramę więzienną",
+    "hacking": "Hakowanie terminala...",
+    "check_time": "Sprawdź wyrok",
+    "prison_sentence": "**Wyrok więzienia:** %s  \n%s"
+  }
+}
