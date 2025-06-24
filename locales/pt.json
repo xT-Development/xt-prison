@@ -1,0 +1,46 @@
+{
+    "notify":{
+        "freedom":"Liberdade!",
+        "new_time_by_roster":"Nova Pena de Prisão",
+        "new_time_by_roster_description":"A tua pena de prisão foi definida para %s meses!",
+        "unjailed_by_roster":"A tua pena de prisão foi anulada, estás a ser solto!",
+        "no_access":"Não tens acesso a este comando!",
+        "updated_players_time":"Tempo de Prisão de %s atualizado para %s meses",
+        "player_sent":"%s foi preso durante %s meses",
+        "time_updated_description":"A tua pena de prisão foi definida para %s meses",
+        "time_updated":"Tempo de Prisão Atualizado",
+        "invalid_player":"Jogador inválido!",
+        "lost_job":"Perdeste o teu emprego!",
+        "confiscated":"Os teus itens foram confiscados!",
+        "returned_items":"Os teus itens foram devolvidos!",
+        "player_released":"%s foi solto!",
+        "lifer":"Estás preso para o resto da vida!",
+        "jail_time":"Tempo de Prisão",
+        "time_left":"Tens %s meses restantes.",
+        "no_time_left":"Já não tens pena de prisão!",
+        "time_remaining":"Tempo Restante: %s meses",
+        "completed_hack":"Concluíste o hack!",
+        "failed_hack":"Falhaste o hack!",
+        "escaped":"Escapaste da prisão!",
+        "checkout":"O teu tempo terminou! Vai fazer o checkout!"
+    },
+
+    "commands":{
+        "jail":"Prender Jogador",
+        "unjail":"Soltar Jogador",
+        "playerid":"ID do Jogador",
+        "check_time":"Verificar o tempo de prisão",
+        "prisoners_roster":"Ver e gerir os prisioneiros atuais"
+    },
+
+    "input":{
+        "jail_player":"Prender Jogador",
+        "playerid":"ID do Jogador no Servidor",
+        "jailtime":"Tempo de Prisão",
+        "months":"Meses ( Minutos )",
+        "hack_gate":"Hackear o Portão da Prisão",
+        "hacking":"A hackear o terminal...",
+        "check_time":"Ver Tempo",
+        "prison_sentence":"**Pena de Prisão:** %s  \n%s"
+    }
+}
