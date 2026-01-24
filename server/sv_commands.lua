@@ -41,7 +41,24 @@ if config.EnableJailCommand then
         if not player then return end
 
         if utils.isCop(source) then
-            local jailInput = lib.callback.await('xt-prison:client:jailPlayerInput', source)
+            local nearbyPlayers = lib.getNearbyPlayers(GetEntityCoords(GetPlayerPed(source)), 5.0)
+            local formattedPlayers = {}
+
+            for i = 1, #nearbyPlayers do
+                local pid = nearbyPlayers[i].id
+
+                formattedPlayers[#formattedPlayers + 1] = {
+                    label = getCharName(pid) .. ' (' .. pid .. ')',
+                    value = pid,
+                    distance = #(GetEntityCoords(GetPlayerPed(source)) - nearbyPlayers[i].coords)
+                }
+            end
+
+            table.sort(formattedPlayers, function(a, b)
+                return a.distance < b.distance
+            end)
+
+            local jailInput = lib.callback.await('xt-prison:client:jailPlayerInput', source, formattedPlayers)
             if not jailInput then return end
 
             local targetSource = tonumber(jailInput[1])
