@@ -22,7 +22,8 @@
         "completed_hack":"You completed the hack!",
         "failed_hack":"You failed the hack!",
         "escaped":"You escaped prison!",
-        "checkout":"Your time is up! Go checkout!"
+        "checkout":"Your time is up! Go checkout!",
+        "wait_before_check":"You need to wait before checking your time again!"
     },
 
     "commands":{
