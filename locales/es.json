@@ -1,0 +1,46 @@
+{
+    "notify": {
+        "freedom": "¡Libertad!",
+        "new_time_by_roster": "Nuevo tiempo de condena",
+        "new_time_by_roster_description": "Tu condena ha sido establecida en %s meses",
+        "unjailed_by_roster": "Tu condena ha sido puesta a cero, ¡vas a ser liberado!",
+        "no_access": "¡No tienes acceso a este comando!",
+        "updated_players_time": "Tiempo de condena de %s actualizado a %s meses",
+        "player_sent": "%s ha sido enviado a prisión por %s meses",
+        "time_updated_description": "Tu condena ha sido establecida en %s meses",
+        "time_updated": "Condena actualizada",
+        "invalid_player": "¡Jugador inválido!",
+        "lost_job": "¡Has perdido tu trabajo!",
+        "confiscated": "¡Tus objetos han sido confiscados!",
+        "returned_items": "¡Tus objetos han sido devueltos!",
+        "player_released": "¡%s ha sido liberado!",
+        "lifer": "¡Estás en prisión de por vida!",
+        "jail_time": "Tiempo de condena",
+        "time_left": "Te quedan %s meses.",
+        "no_time_left": "¡No te queda tiempo de condena!",
+        "time_remaining": "Tiempo restante: %s meses",
+        "completed_hack": "¡Completaste el hackeo!",
+        "failed_hack": "Has fallado el hackeo",
+        "escaped": "¡Has escapado de prisión!",
+        "checkout": "¡Tu tiempo ha terminado! ¡Ve a hacer el checkout!"
+    },
+
+    "commands": {
+        "jail": "Enviar a prisión",
+        "unjail": "Liberar a un jugador",
+        "playerid": "ID del jugador",
+        "check_time": "Consultar tiempo de condena",
+        "prisoners_roster": "Ver y gestionar los prisioneros actuales"
+    },
+
+    "input": {
+        "jail_player": "Enviar a prisión",
+        "playerid": "Server ID del jugador",
+        "jailtime": "Tiempo de condena",
+        "months": "Meses (Minutos)",
+        "hack_gate": "Hackear puerta de prisión",
+        "hacking": "Hackeando terminal...",
+        "check_time": "Consultar tiempo",
+        "prison_sentence": "**Condena:** %s  \n%s"
+    }
+}
