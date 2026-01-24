@@ -146,6 +146,7 @@ return {
 
     -- Triggered on Player Heal --
     PlayerHealed = function()
+        -- TriggerEvent('qbx_medical:client:playerRevived')
         -- TriggerEvent('hospital:client:Revive')
         -- TriggerEvent('osp_ambulance:partialRevive')
     end,
