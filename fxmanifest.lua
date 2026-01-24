@@ -6,7 +6,7 @@ lua54 'yes'
 author 'xT Development'
 description 'Prison for QB, QBX, OX, ND, & ESX'
 repository 'https://github.com/xT-Development/xt-prison'
-version '1.4.5'
+version '1.4.8'
 
 shared_scripts { '@ox_lib/init.lua' }
 
