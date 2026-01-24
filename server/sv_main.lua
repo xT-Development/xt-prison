@@ -13,9 +13,9 @@ local function savePlayerJailTime(src)
     if not cid then return lib.print.debug('player core identifier not found, not saving jailtime') end
     MySQL.insert.await(db.UPDATE_JAILTIME, { cid, jailTime })
 
-    if confiscated[src] then
+    if confiscated[cid] then
         ox_inventory:ReturnInventory(src)
-        confiscated[src] = nil
+        confiscated[cid] = nil
     end
 end
 
@@ -58,9 +58,10 @@ end)
 -- Remove Items on Entry --
 RegisterNetEvent('xt-prison:server:removeItems', function()
     local src = source
-    if confiscated[src] then return end
-
     local cid = getCharID(src)
+    if not cid then return end
+    if confiscated[cid] then return end
+
     local playerItems = ox_inventory:GetInventoryItems(src)
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid })
 
@@ -77,19 +78,21 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
         })
     end
 
-    confiscated[src] = true
+    confiscated[cid] = true
 end)
 
 -- Return Items on Exit --
 RegisterNetEvent('xt-prison:server:returnItems', function()
     local src = source
     local cid = getCharID(src)
+    if not cid then return end
+
     if Player(src).state.jailTime > 0 then
         utils.banPlayer(src, cid)
         return
     end
 
-    if not confiscated[src] then return end
+    if not confiscated[cid] then return end
 
     local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid }) -- Get Confiscated Items
@@ -107,7 +110,7 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
         MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { cid })
     end
 
-    confiscated[src] = nil
+    confiscated[cid] = nil
 
     lib.notify(src, {
         title = locale('notify.returned_items'),
@@ -154,7 +157,26 @@ lib.callback.register('xt-prison:server:receiveCanteenMeal', function(source)
 end)
 
 -- Checks Time Left --
+local lastTimeCheck = {}
+
+local function initTimeCheck(source)
+    lastTimeCheck[source] = lib.timer(5000, function()
+        lastTimeCheck[source] = nil
+    end, true)
+end
+
 lib.callback.register('xt-prison:server:checkJailTime', function(source)
+    if lastTimeCheck[source] then
+        lib.notify(source, {
+            title = locale('notify.wait_before_check'),
+            icon = 'fas fa-hourglass-half',
+            type = 'error'
+        })
+        return
+    end
+
+    initTimeCheck(source) -- init timer
+
     return utils.checkJailTime(source)
 end)
 
