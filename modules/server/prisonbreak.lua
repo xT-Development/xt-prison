@@ -16,7 +16,8 @@ function prisonModules.prisonBreakout(src)
     -- Delete Confiscated Inv --
     local CID = getCharID(src)
     local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { CID })
-    if next(confiscatedItems) then
+    confiscatedItems = json.decode(confiscatedItems or '[]')
+    if confiscatedItems and next(confiscatedItems) then
         MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { CID })
     end
 
