@@ -1,0 +1,45 @@
+{
+    "notify":{
+        "freedom":"自由だ！",
+        "new_time_by_roster":"新しい収監時間",
+        "new_time_by_roster_description":"あなたの収監時間が %s ヶ月に設定されました！",
+        "unjailed_by_roster":"収監時間がゼロに設定されました。釈放されます！",
+        "no_access":"このコマンドを使用する権限がありません！",
+        "updated_players_time":"%s の収監時間を %s ヶ月に更新しました",
+        "player_sent":"%s を %s ヶ月収監しました",
+        "time_updated_description":"あなたの収監時間が %s ヶ月に設定されました",
+        "time_updated":"収監時間を更新しました",
+        "invalid_player":"無効なプレイヤーです！",
+        "lost_job":"職を失いました！",
+        "confiscated":"アイテムが没収されました！",
+        "returned_items":"アイテムが返却されました！",
+        "player_released":"%s が釈放されました！",
+        "lifer":"終身刑に処されました！",
+        "jail_time":"収監時間",
+        "time_left":"あと %s ヶ月残っています。",
+        "no_time_left":"収監時間が残っていません！",
+        "time_remaining":"残り時間：%s ヶ月",
+        "completed_hack":"ハックに成功しました！",
+        "failed_hack":"ハックに失敗しました！",
+        "escaped":"刑務所を脱出しました！",
+        "checkout":"時間です！チェックアウトしてください！",
+        "wait_before_check":"もう少し待ってから再度確認してください！"
+    },
+    "commands":{
+        "jail":"プレイヤーを収監",
+        "unjail":"プレイヤーを釈放",
+        "playerid":"プレイヤーID",
+        "check_time":"収監時間を確認",
+        "prisoners_roster":"現在の収監者を表示・管理"
+    },
+    "input":{
+        "jail_player":"プレイヤーを収監",
+        "playerid":"プレイヤーサーバーID",
+        "jailtime":"収監時間",
+        "months":"ヶ月（分）",
+        "hack_gate":"刑務所ゲートをハック",
+        "hacking":"ターミナルをハック中...",
+        "check_time":"時間を確認",
+        "prison_sentence":"**刑期：** %s  \n%s"
+    }
+}
