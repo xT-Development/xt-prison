@@ -40,7 +40,7 @@
         "jailtime":"Fængselstid",
         "months":"Måneder ( Minutter )",
         "hack_gate":"Hack fængselsporten"
-        "hacking":"Hacker terminal...",
+        "hacking":"Hacker terminalen...",
         "check_time":"Tjek tid",
         "prison_sentence":"**Fængselsstraf:** %s  \n%s"
     }
