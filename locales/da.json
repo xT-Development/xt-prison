@@ -2,45 +2,45 @@
     "notify":{
         "freedom":"Frihed!",
         "new_time_by_roster":"Ny fængselsstraf"
-        "new_time_by_roster_description":"Din fængselsstraf er blevet sat til %s måneder!",
-        "unjailed_by_roster":"Din fængselsstraf er ovre, du bliver løsladt!",
+        "new_time_by_roster_description":"Din fængselsstraf er blevet ændret til %s måneder!",
+        "unjailed_by_roster":"Du har nu afsonet din fængselsstraf, du vil nu blive løsladt!",
         "no_access":"Du har ikke adgang til denne kommando!",
         "updated_players_time":"Opdateret %s's fængselsstraf til %s måneder",
         "player_sent":"%s er blevet sendt i fængsel i %s måneder",
-        "time_updated_description":"Din fængselsstraf er blevet sat til %s måneder",
+        "time_updated_description":"Din fængselsstraf er blevet ændret til %s måneder",
         "time_updated":"Fængselsstraf opdateret",
-        "invalid_player":"Forkert spiller!",
-        "lost_job":"Du mistede dit arbejde!",
-        "confiscated":"Dine ting er blevet taget midlertidigt!",
-        "returned_items":"Dine ting blev returneret!",
-        "player_released":"%s var løsladt!",
+        "invalid_player":"Ugyldig spiller!",
+        "lost_job":"Du har mistet dit arbejde!",
+        "confiscated":"Dine ejendele er blevet midlertidigt konfiskeret!",
+        "returned_items":"Dine ejendele er blevet returneret!",
+        "player_released":"%s er blevet løsladt.",
         "lifer":"Du har fået livstid!",
         "jail_time":"Fængselsstraf",
-        "time_left":"Du har %s måneder tilbage.",
+        "time_left":"Du har %s måneder tilbage af din straf!",
         "no_time_left":"Du har afsonet din fængselsstraf!",
-        "time_remaining":"Fængselsstraf tilbageværende: %s måneder",
-        "completed_hack":"Du gennemførte dit hack!",
-        "failed_hack":"Du fejlede dit hack!",
-        "escaped":"Du har flygtet fra fængslet!",
+        "time_remaining":"Tilbageværende fængselsstraf: %s måneder!",
+        "completed_hack":"Du gennemførte hacket!",
+        "failed_hack":"Du fejlede hacket!",
+        "escaped":"Du er flygtet fra fængslet!",
         "checkout":"Din tid er ovre! Tjek ud!",
-        "wait_before_check":"Du bliver nødt til at vente lidt før du kan tjekke det resterende af din fængselsstraf igen!"
+        "wait_before_check":"Vent et øjeblik, før du kan tjekke din resterende fængselsstraf igen!"
     },
 
     "commands":{
-        "jail":"Send spiller i fængsel",
+        "jail":"Send en spiller i fængsel",
         "unjail":"Løslad en spiller",
         "playerid":"Spiller ID",
-        "check_time":"Tjek din tilbageværende straf",
-        "prisoners_roster":"Se og styr nuværende indsatte"
+        "check_time":"Tjek din resterende fængselsstraf",
+        "prisoners_roster":"Se og administrer nuværende indsatte"
     },
 
     "input":{
-        "jail_player":"Send spiller i fængsel",
+        "jail_player":"Send en spiller i fængsel",
         "playerid":"Spiller ID",
         "jailtime":"Fængselstid",
         "months":"Måneder ( Minutter )",
-        "hack_gate":"Hack fængselsport",
-        "hacking":"Hacker terminal...",
+        "hack_gate":"Hack fængselsporten"
+        "hacking":"Hacker terminalen...",
         "check_time":"Tjek tid",
         "prison_sentence":"**Fængselsstraf:** %s  \n%s"
     }
