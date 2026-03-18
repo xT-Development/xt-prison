@@ -3,7 +3,7 @@
         "freedom":"Frihed!",
         "new_time_by_roster":"Ny fængselsstraf"
         "new_time_by_roster_description":"Din fængselsstraf er blevet ændret til %s måneder!",
-        "unjailed_by_roster":"Du har nu udsonet din fængselsstraf, du vil nu blive løsladt!",
+        "unjailed_by_roster":"Du har nu afsonet din fængselsstraf, du vil nu blive løsladt!",
         "no_access":"Du har ikke adgang til denne kommando!",
         "updated_players_time":"Opdateret %s's fængselsstraf til %s måneder",
         "player_sent":"%s er blevet sendt i fængsel i %s måneder",
