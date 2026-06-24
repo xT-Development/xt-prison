@@ -23,17 +23,17 @@ server_scripts {
 }
 
 files {
-    'data/audioexample_sounds.dat54.rel',
-    'audiodirectory/jail_sounds.awc',
+    'audio/data/xt_prison_sounds.dat54.rel',
+    'audio/audiodirectory/xt_prison_sounds.awc',
     'locales/*.json',
     'configs/client.lua',
     'configs/prisonbreak.lua',
     'modules/client/*.lua',
     'bridge/compat/client.lua',
-    'bridge/compat/resources.lua',
+    'bridge/compat/resources.lua'
 }
 
-data_file 'AUDIO_WAVEPACK' 'audiodirectory'
-data_file 'AUDIO_SOUNDDATA' 'data/audioexample_sounds.dat'
+data_file 'AUDIO_WAVEPACK' 'audio/audiodirectory'
+data_file 'AUDIO_SOUNDDATA' 'audio/data/xt_prison_sounds.dat'
 
 ox_libs { 'locale' }

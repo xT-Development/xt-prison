@@ -120,21 +120,21 @@ return {
         }
     },
 
-    playJailSound     = function()
+    PlayJailSound = function()
         if GetResourceState('qbx_core') == 'started' then
             lib.load('@qbx_core.modules.lib')
 
-            qbx.loadAudioBank('audiodirectory/jail_sounds')
+            qbx.loadAudioBank('audiodirectory/xt_prison_sounds')
             qbx.playAudio({
-                audioName = 'jail',
-                audioRef = 'jail_soundset',
-                source = cache.ped
+                audioName = 'cell_door',
+                audioRef = 'xt_prison'
             })
-            ReleaseNamedScriptAudioBank('audiodirectory/jail_sounds')
+            ReleaseNamedScriptAudioBank('audiodirectory/xt_prison_sounds')
         else
-            RequestScriptAudioBank('audiodirectory/jail_sounds', false)
-            PlaySoundFromEntity(GetSoundId(), 'jail', cache.ped, 'jail_soundset', false, false)
-            ReleaseNamedScriptAudioBank('audiodirectory/jail_sounds')
+            local soundId = GetSoundId()
+            RequestScriptAudioBank('audiodirectory/xt_prison_sounds', false)
+            PlaySoundFrontend(soundId, 'cell_door', 'xt_prison', true)
+            ReleaseNamedScriptAudioBank('audiodirectory/xt_prison_sounds')
         end
     end,
 
@@ -162,7 +162,7 @@ return {
         -- exports['ps-dispatch']:PrisonBreak()
         -- TriggerEvent('police:client:policeAlert', coords, 'Prison Break')
 
-       -- ND Core
+        -- ND Core
         -- exports["ND_MDT"]:createDispatch({
         --             caller = "Boilingbroke Penitentiary",
         --             location = "Sandy Shores",
