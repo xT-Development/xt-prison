@@ -1,4 +1,4 @@
-local prisonModules = require 'modules.client.prison'
+local prisonModules = require 'client.modules.prison'
 
 -- QB/QBX Prison Compat Events --
 RegisterNetEvent('prison:client:Enter', function(setTime)

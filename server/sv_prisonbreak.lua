@@ -1,6 +1,6 @@
 local globalState       = GlobalState
-local prisonBreakcfg    = require 'configs.prisonbreak'
-local prisonModules     = require 'modules.server.prisonbreak'
+local prisonBreakcfg    = lib.load('configs.prisonbreak')
+local prisonModules     = require 'server.modules.prisonbreak'
 
 local function setPrisonAlarms(setState)
     if globalState.prisonAlarms == setState then return end

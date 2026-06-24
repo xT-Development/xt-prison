@@ -1,6 +1,6 @@
 local globalState           = GlobalState
-local prisonModules         = require 'modules.client.prison'
-local prisonBreakModules    = require 'modules.client.prisonbreak'
+local prisonModules         = require 'client.modules.prison'
+local prisonBreakModules    = require 'client.modules.prisonbreak'
 
 lib.callback.register('xt-prison:client:enterJail', function(setTime)
     return prisonModules.enterPrison(setTime)

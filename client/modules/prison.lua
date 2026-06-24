@@ -1,8 +1,8 @@
 local playerState           = LocalPlayer.state
-local config                = require 'configs.client'
-local prisonBreakcfg        = require 'configs.prisonbreak'
-local prisonBreakModules    = require 'modules.client.prisonbreak'
-local utils                 = require 'modules.client.utils'
+local config                = lib.load('configs.client')
+local prisonBreakcfg        = lib.load('configs.prisonbreak')
+local prisonBreakModules    = require 'client.modules.prisonbreak'
+local utils                 = require 'client.modules.utils'
 local resources             = require 'bridge.compat.resources'
 
 local inJail = false

@@ -1,5 +1,5 @@
-local config    = require 'configs.server'
-local utils     = require 'modules.server.utils'
+local config    = lib.load('configs.server')
+local utils     = require 'server.modules.utils'
 
 -- Check Jail Time --
 lib.addCommand('jailtime', {

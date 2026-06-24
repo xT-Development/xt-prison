@@ -1,4 +1,4 @@
-local utils         = require 'modules.server.utils'
+local utils         = require 'server.modules.utils'
 local resources     = require 'bridge.compat.resources'
 
 -- When setJailTime is called, compat for other resources is called

@@ -1,5 +1,5 @@
-local config    = require 'configs.client'
-local utils     = require 'modules.client.utils'
+local config    = lib.load('configs.client')
+local utils     = require 'client.modules.utils'
 local resources = require 'bridge.compat.resources'
 
 local prisonDoc
@@ -77,7 +77,7 @@ local function removePrisonDoctor()
     else
         exports.ox_target:removeLocalEntity(prisonDoc, 'Receive Check-Up')
     end
-    
+
     DeletePed(prisonDoc)
     RemoveBlip(prisonDocBlip)
 end

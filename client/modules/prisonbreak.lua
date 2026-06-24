@@ -1,6 +1,6 @@
-local config            = require 'configs.client'
-local prisonBreakcfg    = require 'configs.prisonbreak'
-local utils             = require 'modules.client.utils'
+local config            = lib.load('configs.client')
+local prisonBreakcfg    = lib.load('configs.prisonbreak')
+local utils             = require 'client.modules.utils'
 local resources         = require 'bridge.compat.resources'
 local globalState       = GlobalState
 

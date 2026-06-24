@@ -1,5 +1,5 @@
-local config            = require 'configs.server'
-local prisonBreakcfg    = require 'configs.prisonbreak'
+local config            = lib.load('configs.server')
+local prisonBreakcfg    = lib.load('configs.prisonbreak')
 
 local utils = {}
 

@@ -1,7 +1,7 @@
-local db                = require 'modules.server.db'
-local config            = require 'configs.server'
-local prisonBreakcfg    = require 'configs.prisonbreak'
-local utils             = require 'modules.server.utils'
+local config            = lib.load('configs.server')
+local prisonBreakcfg    = lib.load('configs.prisonbreak')
+local db                = require 'server.modules.db'
+local utils             = require 'server.modules.utils'
 local ox_inventory      = exports.ox_inventory
 local globalState       = GlobalState
 local confiscated       = {}

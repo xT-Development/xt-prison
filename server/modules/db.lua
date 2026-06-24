@@ -34,7 +34,7 @@ local queries = {
 
 for x = 1, #queries do
     MySQL.query(queries[x].query, {}, function()
-        lib.print.info(('Initializing Table: %s'):format(queries[x].table))
+        lib.print.info(('Initializing Table: ^5%s^0'):format(queries[x].table))
     end)
 end
 

@@ -12,23 +12,30 @@ shared_scripts { '@ox_lib/init.lua' }
 
 client_scripts {
     'bridge/client/*.lua',
+
     'client/*.lua'
 }
 
 server_scripts {
     '@oxmysql/lib/MySQL.lua',
+
     'bridge/compat/server.lua',
     'bridge/server/*.lua',
+
     'server/*.lua'
 }
 
 files {
     'audio/data/xt_prison_sounds.dat54.rel',
     'audio/audiodirectory/xt_prison_sounds.awc',
+
     'locales/*.json',
+
     'configs/client.lua',
     'configs/prisonbreak.lua',
-    'modules/client/*.lua',
+
+    'client/modules/*.lua',
+
     'bridge/compat/client.lua',
     'bridge/compat/resources.lua'
 }

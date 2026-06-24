@@ -1,7 +1,7 @@
 local globalState       = GlobalState
-local db                = require 'modules.server.db'
-local prisonBreakcfg    = require 'configs.prisonbreak'
-local utils             = require 'modules.server.utils'
+local prisonBreakcfg    = lib.load('configs.prisonbreak')
+local db                = require 'server.modules.db'
+local utils             = require 'server.modules.utils'
 local ox_doorlock       = exports.ox_doorlock
 
 local prisonModules = {}

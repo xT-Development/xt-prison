@@ -1,4 +1,4 @@
-local utils = require 'modules.server.utils'
+local utils = require 'server.modules.utils'
 
 -- View Jail Roster --
 lib.callback.register('xt-prison:server:getJailRoster', function(source)
