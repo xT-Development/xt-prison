@@ -54,5 +54,6 @@ return {
 
     GET_ITEMS = 'SELECT data FROM xt_prison_items WHERE owner = ?',
     CONFISCATE_ITEMS = 'INSERT INTO xt_prison_items (owner, data) VALUES (?, ?)',
+    UPDATE_CONFISCATED_ITEMS = 'UPDATE xt_prison_items SET data = ? WHERE owner = ? LIMIT 1',
     CLEAR_CONFISCATED_ITEMS = 'DELETE FROM xt_prison_items WHERE owner = ?'
 }

@@ -63,22 +63,30 @@ RegisterNetEvent('xt-prison:server:removeItems', function()
     if confiscated[cid] then return end
 
     local playerItems = ox_inventory:GetInventoryItems(src)
-    local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid })
-
-    confiscatedItems = json.decode(confiscatedItems) or {}
-
-    if next(playerItems) and not next(confiscatedItems) then -- Checks if player has items and confiscated table is empty
-        MySQL.insert.await(db.CONFISCATE_ITEMS, { cid, json.encode(playerItems) })
-        ox_inventory:ClearInventory(src)
-
-        lib.notify(src, {
-            title = locale('notify.confiscated'),
-            icon = 'fas fa-trash',
-            type = 'error'
-        })
+    if not playerItems or not next(playerItems) then
+        confiscated[cid] = true
+        return
     end
 
+    local existing = MySQL.scalar.await(db.GET_ITEMS, { cid })
+    existing = existing and json.decode(existing) or {}
+
+    if existing and next(existing) then
+        confiscated[cid] = true
+        return
+    end
+
+    local success = MySQL.insert.await(db.CONFISCATE_ITEMS, { cid, json.encode(playerItems) })
+    if not success then return end
+
+    ox_inventory:ClearInventory(src)
     confiscated[cid] = true
+
+    lib.notify(src, {
+        title = locale('notify.confiscated'),
+        icon = 'fas fa-trash',
+        type = 'error'
+    })
 end)
 
 -- Return Items on Exit --
@@ -94,31 +102,44 @@ RegisterNetEvent('xt-prison:server:returnItems', function()
 
     if not confiscated[cid] then return end
 
-    local prisonInventory = ox_inventory:GetInventoryItems(src) -- Get Prison Inventory
-    local confiscatedItems = MySQL.scalar.await(db.GET_ITEMS, { cid }) -- Get Confiscated Items
-    confiscatedItems = json.decode(confiscatedItems) or {}
+    local prisonInventory = ox_inventory:GetInventoryItems(src) -- items picked up while jailed
+    local rawConfiscated = MySQL.scalar.await(db.GET_ITEMS, { cid })
+    local confiscatedItems = rawConfiscated and json.decode(rawConfiscated) or {}
 
-    ox_inventory:ClearInventory(src) -- Clear Prison Inventory
+    ox_inventory:ClearInventory(src) -- wipe prison inventory; re-add allowed items
 
-    Wait(100)
+    local failedItems = {}
 
-    if next(confiscatedItems) then -- Ensure table is not empty
-        for slot, info in pairs(confiscatedItems) do
-            ox_inventory:AddItem(src, info.name, info.count, info.metadata)
+    if confiscatedItems and next(confiscatedItems) then
+        for _, info in pairs(confiscatedItems) do
+            local success, response = ox_inventory:AddItem(src, info.name, info.count, info.metadata)
+            if not success then
+                failedItems[#failedItems + 1] = info
+            end
         end
+    end
 
+    if #failedItems > 0 then
+        MySQL.query.await(db.UPDATE_CONFISCATED_ITEMS, { json.encode(failedItems), cid })
+
+        lib.notify(src, {
+            title = locale('notify.return_partial_failure'),
+            icon = 'fas fa-triangle-exclamation',
+            type = 'error'
+        })
+    else
         MySQL.query.await(db.CLEAR_CONFISCATED_ITEMS, { cid })
+
+        lib.notify(src, {
+            title = locale('notify.returned_items'),
+            icon = 'fas fa-hand-holding-heart',
+            type = 'success'
+        })
     end
 
     confiscated[cid] = nil
 
-    lib.notify(src, {
-        title = locale('notify.returned_items'),
-        icon = 'fas fa-hand-holding-heart',
-        type = 'success'
-    })
-
-    for slot, info in pairs(prisonInventory) do -- Return some prison items
+    for _, info in pairs(prisonInventory) do -- Return allowed prison items
         if config.AllowedToKeepItems[info.name] then
             ox_inventory:AddItem(src, info.name, info.count, info.metadata)
         end
