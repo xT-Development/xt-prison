@@ -156,7 +156,7 @@ return {
     Emote = function(emote)
         -- exports.scully_emotemenu:playEmoteByCommand(emote)
         -- exports["rpemotes"]:EmoteCommandStart(emote)
-        -- exports["bablo-animations"]:playAnimation(PlayerPedId(), emote)
+        -- exports["bablo-animations"]:playAnimation(cache.ped, emote)
     end,
 
     -- Trigger Prison Break Dispatch --
