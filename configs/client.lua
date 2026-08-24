@@ -149,6 +149,7 @@ return {
         -- TriggerEvent('qbx_medical:client:playerRevived')
         -- TriggerEvent('hospital:client:Revive')
         -- TriggerEvent('osp_ambulance:partialRevive')
+        -- exports.randol_medical:RevivePlayer()
     end,
 
     -- Trigger Emote --
