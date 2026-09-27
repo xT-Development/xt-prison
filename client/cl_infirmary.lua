@@ -10,7 +10,7 @@ local function initPrisonDoctor()
 
     local docInfo = config.PrisonDoctor
     prisonDoc = utils.createPed(docInfo.model, docInfo.coords, docInfo.scenario)
-    prisonDocBlip = utils.createBlip('Prison Infirmary', docInfo.coords, 61, 0.3, 1)
+    prisonDocBlip = utils.createBlip('Infirmary', docInfo.coords, 61, 0.3, 1)
     if resources.qb_target then
             exports['qb-target']:AddTargetEntity(prisonDoc, {
                 options = {

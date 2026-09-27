@@ -32,7 +32,7 @@ local function initCanteen()
 
     local canteenInfo = config.CanteenPed
     canteenPed = utils.createPed(canteenInfo.model, canteenInfo.coords, canteenInfo.scenario)
-    canteenBlip = utils.createBlip('Prison Canteen', canteenInfo.coords, 273, 0.3, 2)
+    canteenBlip = utils.createBlip('Canteen', canteenInfo.coords, 273, 0.3, 2)
 
     if resources.qb_target then
         exports['qb-target']:AddTargetEntity(canteenPed, {

@@ -20,6 +20,8 @@ function utils.createBlip(text, coords, icon, scale, color, pulse)
     if not text or not coords then lib.print.error('create blip error, missing text or coords') return end
 
     local blipID = AddBlipForCoord(coords.x, coords.y, coords.z)
+    local catID = 102
+    local catName = "Bolingbroke Penitentiary"
     SetBlipSprite(blipID, icon or 1)
     SetBlipScale(blipID, scale or 0.5)
     SetBlipDisplay(blipID, 4)
@@ -28,7 +30,8 @@ function utils.createBlip(text, coords, icon, scale, color, pulse)
     BeginTextCommandSetBlipName("STRING")
     AddTextComponentString(text)
     EndTextCommandSetBlipName(blipID)
-    SetBlipCategory(blipID, 102)
+    AddTextEntry("BLIP_CAT_" .. catID, catName)
+    SetBlipCategory(blipID, catID, catName)
 
     if pulse then
         PulseBlip(blipID)
