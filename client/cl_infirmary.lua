@@ -1,5 +1,6 @@
 local config    = lib.load('configs.client')
 local utils     = require 'client.modules.utils'
+local prisonModules  = require 'client.modules.prison'
 local resources = require 'bridge.compat.resources'
 
 local prisonDoc
@@ -10,6 +11,7 @@ local function initPrisonDoctor()
 
     local docInfo = config.PrisonDoctor
     prisonDoc = utils.createPed(docInfo.model, docInfo.coords, docInfo.scenario)
+    prisonModules.initMainBlip()
     prisonDocBlip = utils.createBlip('Prison Infirmary', docInfo.coords, 61, 0.3, 1)
     if resources.qb_target then
             exports['qb-target']:AddTargetEntity(prisonDoc, {
