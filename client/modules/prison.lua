@@ -91,6 +91,14 @@ function prisonModules.removeCheckoutLocation()
     end
 end
 
+-- Create Main Prison Blip (must run before other category blips) --
+function prisonModules.initMainBlip()
+    if mainBlip and DoesBlipExist(mainBlip) then return end
+    if resources.xt_prisonjobs then return end
+
+    mainBlip = utils.createBlip('Prison', prisonBreakcfg.Center, 188, 0.8, 17)
+end
+
 -- Create Prison Zone for Prison Break Distance Checks --
 function prisonModules.createPrisonZone()
     PrisonZone = lib.points.new({
@@ -108,10 +116,6 @@ function prisonModules.createPrisonZone()
                 config.Dispatch(prisonBreakcfg.Center)
             end
         end
-    end
-
-    if not resources.xt_prisonjobs then
-        mainBlip = utils.createBlip('Prison', prisonBreakcfg.Center, 60, 0.7, 3)
     end
 end
 

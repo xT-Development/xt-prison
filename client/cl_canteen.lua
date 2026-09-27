@@ -1,5 +1,6 @@
 local config    = lib.load('configs.client')
 local utils     = require 'client.modules.utils'
+local prisonModules  = require 'client.modules.prison'
 local resources = require 'bridge.compat.resources'
 
 local canteenPed
@@ -32,6 +33,7 @@ local function initCanteen()
 
     local canteenInfo = config.CanteenPed
     canteenPed = utils.createPed(canteenInfo.model, canteenInfo.coords, canteenInfo.scenario)
+    prisonModules.initMainBlip()
     canteenBlip = utils.createBlip('Prison Canteen', canteenInfo.coords, 273, 0.3, 2)
 
     if resources.qb_target then
